@@ -9,7 +9,7 @@ namespace SAMAPILibrary.DataObjects
     /// <summary>
     /// Parameters about the array that are computed based on other inputs (e.g. the GISData).
     /// </summary>
-    class ComputedArrayParams:IDataParamSetter
+    class ArrayParamsComputed:IDataParamSetter
     {
         //Variablevalues
         /// <summary>
@@ -39,7 +39,7 @@ namespace SAMAPILibrary.DataObjects
         /// </summary>
         public readonly int inverter_count = 1;
 
-        public ComputedArrayParams(GISData gis, ArrayParams array)
+        public ArrayParamsComputed(GISData gis, ArrayParamsUser array)
         {
             // TODO - Find closest TMY2 file
             weather_file = "ExampleFiles\\AZ Phoenix.tm2";

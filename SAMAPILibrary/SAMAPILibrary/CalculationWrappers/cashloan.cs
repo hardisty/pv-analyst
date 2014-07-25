@@ -3,28 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SAMAPILibrary.SAMAPI;
-using SAMAPILibrary.DataObjects;
+using SAMAPILibrary.DataObjects.FinancialModels;
 using SAMAPILibrary.DataObjects.OutputData;
 
 namespace SAMAPILibrary.CalculationWrappers
 {
-    public class pvsam1
+    public class cashloan
     {
-        public pvsam1()
+        public cashloan()
         {
         }
 
-        public SystemModelOutput run(DataObjects.GISData gis, DataObjects.ArrayParamsUser array)
+        public CashLoanOutput run(UtilityRateOutput uro)
         {
             Data data = new Data();
-            Module module = new Module("pvsamv1");
+            Module module = new Module("cashloan");
 
-            ArrayParams allarray = new ArrayParams(array, new ArrayParamsComputed(gis, array));
-            allarray.setDataParameters(data);
+            CashloanParams p = new CashloanParams(uro);
+            p.setDataParameters(data);
 
             if (module.Exec(data))
             {
-                return new SystemModelOutput(data);
+                return new CashLoanOutput(data);
             }
             else
             {
@@ -40,10 +40,10 @@ namespace SAMAPILibrary.CalculationWrappers
                     Console.WriteLine("[ " + stype + " at time:" + time + " ]: " + msg + "\n");
                     idx++;
                 }
-                Console.WriteLine("pvsam1 failed\n");
+                Console.WriteLine("cashloan failed\n");
+
                 return null;
             }
-
         }
     }
 }

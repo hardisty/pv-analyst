@@ -5,6 +5,8 @@ using System.Text;
 using SAMAPILibrary.SAMAPI;
 using SAMAPILibrary.CalculationWrappers;
 using SAMAPILibrary.DataObjects;
+using SAMAPILibrary.DataObjects.FinancialModels;
+using SAMAPILibrary.DataObjects.OutputData;
 
 namespace SAMAPITester
 {
@@ -12,23 +14,63 @@ namespace SAMAPITester
     {
         static void Main(string[] args)
         {
+            
+            PVSAM();
             CustomSAMImplementation();
-            //PVSAM();
 
         }
 
         static void CustomSAMImplementation()
         {
+            
+            // SAM
             GISData gis = new GISData();
-            ArrayParams array = new ArrayParams();
-            Data data = new pvsam1().run(gis,array);
+            ArrayParamsUser array = new ArrayParamsUser();
+            SystemModelOutput smo = new pvsam1().run(gis,array);
+            AnnualOutputOutput aooData = new annualoutput().run(smo);
+            UtilityRateOutput uro = new utilityrate().run(aooData);
+            CashLoanOutput clo = new cashloan().run(uro);
 
-            float[] ac_hourly = data.GetArray("hourly_ac_net");
-            float[] ac_monthly = data.GetArray("monthly_ac_net");
-            float ac_annual = data.GetNumber("annual_ac_net");
+            float[] ac_hourly = smo.ac_hourly;
+            float[] ac_monthly = smo.ac_monthly;
+            float ac_annual = smo.ac_annual;
             for (int i = 0; i < ac_monthly.Length; i++)
+            {
                 Console.WriteLine("ac_monthly[" + i + "] (kWh) = " + ac_monthly[i] + "\n");
+            }
             Console.WriteLine("ac_annual (kWh) = " + ac_annual + "\n");
+
+
+            //annual output
+            
+
+            float[] net_hourly = aooData.net_hourly;
+            float[] net_annual = aooData.net_annual;
+            
+            for (int i = 0; i < net_annual.Length; i++)
+            {
+                Console.WriteLine(net_annual[i]);
+            }
+
+            //utility rate
+            
+
+            float[] energy_net = uro.energy_net;
+            for (int i = 0; i < energy_net.Length; i++)
+            {
+                Console.WriteLine("energy_net_annual (kWh) = " + energy_net[i] + "\n");
+            }
+            
+            //cashloan
+            
+
+            float lcoe_real = clo.lcoe_real;
+            float lcoe_nom = clo.lcoe_nom;
+            float npv = clo.npv;
+
+            Console.WriteLine("LCOE real (cents/kWh) = " + lcoe_real + "\n");
+            Console.WriteLine("LCOE nominal (cents/kWh) = " + lcoe_nom + "\n");
+            Console.WriteLine("NPV = $" + npv + "\n");
         }
 
         static void pvWattsTest()
@@ -94,6 +136,7 @@ namespace SAMAPITester
 
         static void PVSAM()
         {
+            #region System Model and Climate File
             // Run Default SAM Flat Plate PV with Residential financing
 
             Data data = new Data();
@@ -280,7 +323,7 @@ namespace SAMAPITester
             //data.SetNumber("self_shading_nmody", 3f);
             //data.SetNumber("self_shading_nrows", 3f);
             //data.SetNumber("self_shading_rowspace", 5f);
-
+#endregion 
             float[] ac_hourly = new float[] { 0 };
             Module module = new Module("pvsamv1");
             if (module.Exec(data))
@@ -288,9 +331,10 @@ namespace SAMAPITester
                 ac_hourly = data.GetArray("hourly_ac_net");
                 float[] ac_monthly = data.GetArray("monthly_ac_net");
                 float ac_annual = data.GetNumber("annual_ac_net");
-                for (int i = 0; i < ac_monthly.Length; i++)
-                    Console.WriteLine("ac_monthly[" + i + "] (kWh) = " + ac_monthly[i] + "\n");
-                Console.WriteLine("ac_annual (kWh) = " + ac_annual + "\n");
+                Console.WriteLine(ac_annual);
+                //for (int i = 0; i < ac_monthly.Length; i++)
+                //    Console.WriteLine("ac_monthly[" + i + "] (kWh) = " + ac_monthly[i] + "\n");
+                //Console.WriteLine("ac_annual (kWh) = " + ac_annual + "\n");
             }
             else
             {
@@ -309,7 +353,7 @@ namespace SAMAPITester
                 Console.WriteLine("pvsamv1 example failed\n");
             }
 
-            // annualoutput input variables
+            #region // annualoutput input variables  //This doesn't affect the final output it doesn't seem lik.
             data.SetNumber("analysis_years", 25f);
             data.SetArray("energy_availability", new float[] { 100f });
             data.SetArray("energy_degradation", new float[] { 0.5f });
@@ -328,13 +372,17 @@ namespace SAMAPITester
 { 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f } });
             data.SetNumber("system_use_lifetime_output", 0f);
             data.SetArray("energy_net_hourly", ac_hourly);
-
+            #endregion 
             float[] net_hourly = new float[] { 0 };
             module = new Module("annualoutput");
             if (module.Exec(data))
             {
                 net_hourly = data.GetArray("hourly_e_net_delivered");
-                Console.WriteLine(net_hourly.Length);
+                float[] net_annual = new float[] { };
+                net_annual = data.GetArray("annual_e_net_delivered");
+                for (int i=0;i<net_annual.Length;i++){
+                Console.WriteLine(net_annual[i]);
+                }
             }
             else
             {
@@ -354,7 +402,7 @@ namespace SAMAPITester
             }
 
 
-            // utilityrate input variables
+            #region // utilityrate input variables
             data.SetNumber("analysis_years", 25f);
             data.SetArray("e_with_system", net_hourly);
             data.SetArray("system_availability", new float[] { 100f });
@@ -366,138 +414,140 @@ namespace SAMAPITester
             data.SetNumber("ur_flat_buy_rate", 0.12f);
             data.SetNumber("ur_flat_sell_rate", 0f);
             data.SetNumber("ur_tou_enable", 0f);
-            data.SetNumber("ur_tou_p1_buy_rate", 0.12f);
-            data.SetNumber("ur_tou_p1_sell_rate", 0f);
-            data.SetNumber("ur_tou_p2_buy_rate", 0.12f);
-            data.SetNumber("ur_tou_p2_sell_rate", 0f);
-            data.SetNumber("ur_tou_p3_buy_rate", 0.12f);
-            data.SetNumber("ur_tou_p3_sell_rate", 0f);
-            data.SetNumber("ur_tou_p4_buy_rate", 0.12f);
-            data.SetNumber("ur_tou_p4_sell_rate", 0f);
-            data.SetNumber("ur_tou_p5_buy_rate", 0.12f);
-            data.SetNumber("ur_tou_p5_sell_rate", 0f);
-            data.SetNumber("ur_tou_p6_buy_rate", 0.12f);
-            data.SetNumber("ur_tou_p6_sell_rate", 0f);
-            data.SetNumber("ur_tou_p7_buy_rate", 0.12f);
-            data.SetNumber("ur_tou_p7_sell_rate", 0f);
-            data.SetNumber("ur_tou_p8_buy_rate", 0.12f);
-            data.SetNumber("ur_tou_p8_sell_rate", 0f);
-            data.SetNumber("ur_tou_p9_buy_rate", 0.12f);
-            data.SetNumber("ur_tou_p9_sell_rate", 0f);
-            data.SetString("ur_tou_sched_weekday", "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
-            data.SetString("ur_tou_sched_weekend", "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
             data.SetNumber("ur_dc_enable", 0f);
-            data.SetNumber("ur_dc_fixed_m1", 0f);
-            data.SetNumber("ur_dc_fixed_m2", 0f);
-            data.SetNumber("ur_dc_fixed_m3", 0f);
-            data.SetNumber("ur_dc_fixed_m4", 0f);
-            data.SetNumber("ur_dc_fixed_m5", 0f);
-            data.SetNumber("ur_dc_fixed_m6", 0f);
-            data.SetNumber("ur_dc_fixed_m7", 0f);
-            data.SetNumber("ur_dc_fixed_m8", 0f);
-            data.SetNumber("ur_dc_fixed_m9", 0f);
-            data.SetNumber("ur_dc_fixed_m10", 0f);
-            data.SetNumber("ur_dc_fixed_m11", 0f);
-            data.SetNumber("ur_dc_fixed_m12", 0f);
-            data.SetNumber("ur_dc_p1", 0f);
-            data.SetNumber("ur_dc_p2", 0f);
-            data.SetNumber("ur_dc_p3", 0f);
-            data.SetNumber("ur_dc_p4", 0f);
-            data.SetNumber("ur_dc_p5", 0f);
-            data.SetNumber("ur_dc_p6", 0f);
-            data.SetNumber("ur_dc_p7", 0f);
-            data.SetNumber("ur_dc_p8", 0f);
-            data.SetNumber("ur_dc_p9", 0f);
-            data.SetString("ur_dc_sched_weekday", "444444443333333333334444444444443333333333334444444444443333333333334444444444443333333333334444222222221111111111112222222222221111111111112222222222221111111111112222222222221111111111112222222222221111111111112222222222221111111111112222444444443333333333334444444444443333333333334444");
-            data.SetString("ur_dc_sched_weekend", "444444443333333333334444444444443333333333334444444444443333333333334444444444443333333333334444222222221111111111112222222222221111111111112222222222221111111111112222222222221111111111112222222222221111111111112222222222221111111111112222444444443333333333334444444444443333333333334444");
             data.SetNumber("ur_tr_enable", 0f);
-            data.SetNumber("ur_tr_sell_mode", 1f);
-            data.SetNumber("ur_tr_sell_rate", 0f);
-            data.SetNumber("ur_tr_s1_energy_ub1", 1e+038f);
-            data.SetNumber("ur_tr_s1_energy_ub2", 1e+038f);
-            data.SetNumber("ur_tr_s1_energy_ub3", 1e+038f);
-            data.SetNumber("ur_tr_s1_energy_ub4", 1e+038f);
-            data.SetNumber("ur_tr_s1_energy_ub5", 1e+038f);
-            data.SetNumber("ur_tr_s1_energy_ub6", 1e+038f);
-            data.SetNumber("ur_tr_s1_rate1", 0f);
-            data.SetNumber("ur_tr_s1_rate2", 0f);
-            data.SetNumber("ur_tr_s1_rate3", 0f);
-            data.SetNumber("ur_tr_s1_rate4", 0f);
-            data.SetNumber("ur_tr_s1_rate5", 0f);
-            data.SetNumber("ur_tr_s1_rate6", 0f);
-            data.SetNumber("ur_tr_s2_energy_ub1", 1e+038f);
-            data.SetNumber("ur_tr_s2_energy_ub2", 1e+038f);
-            data.SetNumber("ur_tr_s2_energy_ub3", 1e+038f);
-            data.SetNumber("ur_tr_s2_energy_ub4", 1e+038f);
-            data.SetNumber("ur_tr_s2_energy_ub5", 1e+038f);
-            data.SetNumber("ur_tr_s2_energy_ub6", 1e+038f);
-            data.SetNumber("ur_tr_s2_rate1", 0f);
-            data.SetNumber("ur_tr_s2_rate2", 0f);
-            data.SetNumber("ur_tr_s2_rate3", 0f);
-            data.SetNumber("ur_tr_s2_rate4", 0f);
-            data.SetNumber("ur_tr_s2_rate5", 0f);
-            data.SetNumber("ur_tr_s2_rate6", 0f);
-            data.SetNumber("ur_tr_s3_energy_ub1", 1e+038f);
-            data.SetNumber("ur_tr_s3_energy_ub2", 1e+038f);
-            data.SetNumber("ur_tr_s3_energy_ub3", 1e+038f);
-            data.SetNumber("ur_tr_s3_energy_ub4", 1e+038f);
-            data.SetNumber("ur_tr_s3_energy_ub5", 1e+038f);
-            data.SetNumber("ur_tr_s3_energy_ub6", 1e+038f);
-            data.SetNumber("ur_tr_s3_rate1", 0f);
-            data.SetNumber("ur_tr_s3_rate2", 0f);
-            data.SetNumber("ur_tr_s3_rate3", 0f);
-            data.SetNumber("ur_tr_s3_rate4", 0f);
-            data.SetNumber("ur_tr_s3_rate5", 0f);
-            data.SetNumber("ur_tr_s3_rate6", 0f);
-            data.SetNumber("ur_tr_s4_energy_ub1", 1e+038f);
-            data.SetNumber("ur_tr_s4_energy_ub2", 1e+038f);
-            data.SetNumber("ur_tr_s4_energy_ub3", 1e+038f);
-            data.SetNumber("ur_tr_s4_energy_ub4", 1e+038f);
-            data.SetNumber("ur_tr_s4_energy_ub5", 1e+038f);
-            data.SetNumber("ur_tr_s4_energy_ub6", 1e+038f);
-            data.SetNumber("ur_tr_s4_rate1", 0f);
-            data.SetNumber("ur_tr_s4_rate2", 0f);
-            data.SetNumber("ur_tr_s4_rate3", 0f);
-            data.SetNumber("ur_tr_s4_rate4", 0f);
-            data.SetNumber("ur_tr_s4_rate5", 0f);
-            data.SetNumber("ur_tr_s4_rate6", 0f);
-            data.SetNumber("ur_tr_s5_energy_ub1", 1e+038f);
-            data.SetNumber("ur_tr_s5_energy_ub2", 1e+038f);
-            data.SetNumber("ur_tr_s5_energy_ub3", 1e+038f);
-            data.SetNumber("ur_tr_s5_energy_ub4", 1e+038f);
-            data.SetNumber("ur_tr_s5_energy_ub5", 1e+038f);
-            data.SetNumber("ur_tr_s5_energy_ub6", 1e+038f);
-            data.SetNumber("ur_tr_s5_rate1", 0f);
-            data.SetNumber("ur_tr_s5_rate2", 0f);
-            data.SetNumber("ur_tr_s5_rate3", 0f);
-            data.SetNumber("ur_tr_s5_rate4", 0f);
-            data.SetNumber("ur_tr_s5_rate5", 0f);
-            data.SetNumber("ur_tr_s5_rate6", 0f);
-            data.SetNumber("ur_tr_s6_energy_ub1", 1e+038f);
-            data.SetNumber("ur_tr_s6_energy_ub2", 1e+038f);
-            data.SetNumber("ur_tr_s6_energy_ub3", 1e+038f);
-            data.SetNumber("ur_tr_s6_energy_ub4", 1e+038f);
-            data.SetNumber("ur_tr_s6_energy_ub5", 1e+038f);
-            data.SetNumber("ur_tr_s6_energy_ub6", 1e+038f);
-            data.SetNumber("ur_tr_s6_rate1", 0f);
-            data.SetNumber("ur_tr_s6_rate2", 0f);
-            data.SetNumber("ur_tr_s6_rate3", 0f);
-            data.SetNumber("ur_tr_s6_rate4", 0f);
-            data.SetNumber("ur_tr_s6_rate5", 0f);
-            data.SetNumber("ur_tr_s6_rate6", 0f);
-            data.SetNumber("ur_tr_sched_m1", 0f);
-            data.SetNumber("ur_tr_sched_m2", 0f);
-            data.SetNumber("ur_tr_sched_m3", 0f);
-            data.SetNumber("ur_tr_sched_m4", 0f);
-            data.SetNumber("ur_tr_sched_m5", 0f);
-            data.SetNumber("ur_tr_sched_m6", 0f);
-            data.SetNumber("ur_tr_sched_m7", 0f);
-            data.SetNumber("ur_tr_sched_m8", 0f);
-            data.SetNumber("ur_tr_sched_m9", 0f);
-            data.SetNumber("ur_tr_sched_m10", 0f);
-            data.SetNumber("ur_tr_sched_m11", 0f);
-            data.SetNumber("ur_tr_sched_m12", 0f);
-
+            //data.SetNumber("ur_tou_p1_buy_rate", 0.12f);
+            //data.SetNumber("ur_tou_p1_sell_rate", 0f);
+            //data.SetNumber("ur_tou_p2_buy_rate", 0.12f);
+            //data.SetNumber("ur_tou_p2_sell_rate", 0f);
+            //data.SetNumber("ur_tou_p3_buy_rate", 0.12f);
+            //data.SetNumber("ur_tou_p3_sell_rate", 0f);
+            //data.SetNumber("ur_tou_p4_buy_rate", 0.12f);
+            //data.SetNumber("ur_tou_p4_sell_rate", 0f);
+            //data.SetNumber("ur_tou_p5_buy_rate", 0.12f);
+            //data.SetNumber("ur_tou_p5_sell_rate", 0f);
+            //data.SetNumber("ur_tou_p6_buy_rate", 0.12f);
+            //data.SetNumber("ur_tou_p6_sell_rate", 0f);
+            //data.SetNumber("ur_tou_p7_buy_rate", 0.12f);
+            //data.SetNumber("ur_tou_p7_sell_rate", 0f);
+            //data.SetNumber("ur_tou_p8_buy_rate", 0.12f);
+            //data.SetNumber("ur_tou_p8_sell_rate", 0f);
+            //data.SetNumber("ur_tou_p9_buy_rate", 0.12f);
+            //data.SetNumber("ur_tou_p9_sell_rate", 0f);
+            //data.SetString("ur_tou_sched_weekday", "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
+            //data.SetString("ur_tou_sched_weekend", "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
+            
+            //data.SetNumber("ur_dc_fixed_m1", 0f);
+            //data.SetNumber("ur_dc_fixed_m2", 0f);
+            //data.SetNumber("ur_dc_fixed_m3", 0f);
+            //data.SetNumber("ur_dc_fixed_m4", 0f);
+            //data.SetNumber("ur_dc_fixed_m5", 0f);
+            //data.SetNumber("ur_dc_fixed_m6", 0f);
+            //data.SetNumber("ur_dc_fixed_m7", 0f);
+            //data.SetNumber("ur_dc_fixed_m8", 0f);
+            //data.SetNumber("ur_dc_fixed_m9", 0f);
+            //data.SetNumber("ur_dc_fixed_m10", 0f);
+            //data.SetNumber("ur_dc_fixed_m11", 0f);
+            //data.SetNumber("ur_dc_fixed_m12", 0f);
+            //data.SetNumber("ur_dc_p1", 0f);
+            //data.SetNumber("ur_dc_p2", 0f);
+            //data.SetNumber("ur_dc_p3", 0f);
+            //data.SetNumber("ur_dc_p4", 0f);
+            //data.SetNumber("ur_dc_p5", 0f);
+            //data.SetNumber("ur_dc_p6", 0f);
+            //data.SetNumber("ur_dc_p7", 0f);
+            //data.SetNumber("ur_dc_p8", 0f);
+            //data.SetNumber("ur_dc_p9", 0f);
+            //data.SetString("ur_dc_sched_weekday", "444444443333333333334444444444443333333333334444444444443333333333334444444444443333333333334444222222221111111111112222222222221111111111112222222222221111111111112222222222221111111111112222222222221111111111112222222222221111111111112222444444443333333333334444444444443333333333334444");
+            //data.SetString("ur_dc_sched_weekend", "444444443333333333334444444444443333333333334444444444443333333333334444444444443333333333334444222222221111111111112222222222221111111111112222222222221111111111112222222222221111111111112222222222221111111111112222222222221111111111112222444444443333333333334444444444443333333333334444");
+            
+            //data.SetNumber("ur_tr_sell_mode", 1f);
+            //data.SetNumber("ur_tr_sell_rate", 0f);
+            //data.SetNumber("ur_tr_s1_energy_ub1", 1e+038f);
+            //data.SetNumber("ur_tr_s1_energy_ub2", 1e+038f);
+            //data.SetNumber("ur_tr_s1_energy_ub3", 1e+038f);
+            //data.SetNumber("ur_tr_s1_energy_ub4", 1e+038f);
+            //data.SetNumber("ur_tr_s1_energy_ub5", 1e+038f);
+            //data.SetNumber("ur_tr_s1_energy_ub6", 1e+038f);
+            //data.SetNumber("ur_tr_s1_rate1", 0f);
+            //data.SetNumber("ur_tr_s1_rate2", 0f);
+            //data.SetNumber("ur_tr_s1_rate3", 0f);
+            //data.SetNumber("ur_tr_s1_rate4", 0f);
+            //data.SetNumber("ur_tr_s1_rate5", 0f);
+            //data.SetNumber("ur_tr_s1_rate6", 0f);
+            //data.SetNumber("ur_tr_s2_energy_ub1", 1e+038f);
+            //data.SetNumber("ur_tr_s2_energy_ub2", 1e+038f);
+            //data.SetNumber("ur_tr_s2_energy_ub3", 1e+038f);
+            //data.SetNumber("ur_tr_s2_energy_ub4", 1e+038f);
+            //data.SetNumber("ur_tr_s2_energy_ub5", 1e+038f);
+            //data.SetNumber("ur_tr_s2_energy_ub6", 1e+038f);
+            //data.SetNumber("ur_tr_s2_rate1", 0f);
+            //data.SetNumber("ur_tr_s2_rate2", 0f);
+            //data.SetNumber("ur_tr_s2_rate3", 0f);
+            //data.SetNumber("ur_tr_s2_rate4", 0f);
+            //data.SetNumber("ur_tr_s2_rate5", 0f);
+            //data.SetNumber("ur_tr_s2_rate6", 0f);
+            //data.SetNumber("ur_tr_s3_energy_ub1", 1e+038f);
+            //data.SetNumber("ur_tr_s3_energy_ub2", 1e+038f);
+            //data.SetNumber("ur_tr_s3_energy_ub3", 1e+038f);
+            //data.SetNumber("ur_tr_s3_energy_ub4", 1e+038f);
+            //data.SetNumber("ur_tr_s3_energy_ub5", 1e+038f);
+            //data.SetNumber("ur_tr_s3_energy_ub6", 1e+038f);
+            //data.SetNumber("ur_tr_s3_rate1", 0f);
+            //data.SetNumber("ur_tr_s3_rate2", 0f);
+            //data.SetNumber("ur_tr_s3_rate3", 0f);
+            //data.SetNumber("ur_tr_s3_rate4", 0f);
+            //data.SetNumber("ur_tr_s3_rate5", 0f);
+            //data.SetNumber("ur_tr_s3_rate6", 0f);
+            //data.SetNumber("ur_tr_s4_energy_ub1", 1e+038f);
+            //data.SetNumber("ur_tr_s4_energy_ub2", 1e+038f);
+            //data.SetNumber("ur_tr_s4_energy_ub3", 1e+038f);
+            //data.SetNumber("ur_tr_s4_energy_ub4", 1e+038f);
+            //data.SetNumber("ur_tr_s4_energy_ub5", 1e+038f);
+            //data.SetNumber("ur_tr_s4_energy_ub6", 1e+038f);
+            //data.SetNumber("ur_tr_s4_rate1", 0f);
+            //data.SetNumber("ur_tr_s4_rate2", 0f);
+            //data.SetNumber("ur_tr_s4_rate3", 0f);
+            //data.SetNumber("ur_tr_s4_rate4", 0f);
+            //data.SetNumber("ur_tr_s4_rate5", 0f);
+            //data.SetNumber("ur_tr_s4_rate6", 0f);
+            //data.SetNumber("ur_tr_s5_energy_ub1", 1e+038f);
+            //data.SetNumber("ur_tr_s5_energy_ub2", 1e+038f);
+            //data.SetNumber("ur_tr_s5_energy_ub3", 1e+038f);
+            //data.SetNumber("ur_tr_s5_energy_ub4", 1e+038f);
+            //data.SetNumber("ur_tr_s5_energy_ub5", 1e+038f);
+            //data.SetNumber("ur_tr_s5_energy_ub6", 1e+038f);
+            //data.SetNumber("ur_tr_s5_rate1", 0f);
+            //data.SetNumber("ur_tr_s5_rate2", 0f);
+            //data.SetNumber("ur_tr_s5_rate3", 0f);
+            //data.SetNumber("ur_tr_s5_rate4", 0f);
+            //data.SetNumber("ur_tr_s5_rate5", 0f);
+            //data.SetNumber("ur_tr_s5_rate6", 0f);
+            //data.SetNumber("ur_tr_s6_energy_ub1", 1e+038f);
+            //data.SetNumber("ur_tr_s6_energy_ub2", 1e+038f);
+            //data.SetNumber("ur_tr_s6_energy_ub3", 1e+038f);
+            //data.SetNumber("ur_tr_s6_energy_ub4", 1e+038f);
+            //data.SetNumber("ur_tr_s6_energy_ub5", 1e+038f);
+            //data.SetNumber("ur_tr_s6_energy_ub6", 1e+038f);
+            //data.SetNumber("ur_tr_s6_rate1", 0f);
+            //data.SetNumber("ur_tr_s6_rate2", 0f);
+            //data.SetNumber("ur_tr_s6_rate3", 0f);
+            //data.SetNumber("ur_tr_s6_rate4", 0f);
+            //data.SetNumber("ur_tr_s6_rate5", 0f);
+            //data.SetNumber("ur_tr_s6_rate6", 0f);
+            //data.SetNumber("ur_tr_sched_m1", 0f);
+            //data.SetNumber("ur_tr_sched_m2", 0f);
+            //data.SetNumber("ur_tr_sched_m3", 0f);
+            //data.SetNumber("ur_tr_sched_m4", 0f);
+            //data.SetNumber("ur_tr_sched_m5", 0f);
+            //data.SetNumber("ur_tr_sched_m6", 0f);
+            //data.SetNumber("ur_tr_sched_m7", 0f);
+            //data.SetNumber("ur_tr_sched_m8", 0f);
+            //data.SetNumber("ur_tr_sched_m9", 0f);
+            //data.SetNumber("ur_tr_sched_m10", 0f);
+            //data.SetNumber("ur_tr_sched_m11", 0f);
+            //data.SetNumber("ur_tr_sched_m12", 0f);
+            #endregion
             module = new Module("utilityrate");
             if (module.Exec(data))
             {
@@ -525,7 +575,7 @@ namespace SAMAPITester
             }
 
 
-            // cashloan input variables
+            #region // cashloan input variables
             data.SetNumber("analysis_years", 25f);
             data.SetNumber("federal_tax_rate", 28f);
             data.SetNumber("state_tax_rate", 7f);
@@ -662,7 +712,7 @@ namespace SAMAPITester
             data.SetNumber("mortgage", 0f);
             data.SetNumber("total_installed_cost", 22194.2f);
             data.SetNumber("salvage_percentage", 0f);
-
+            #endregion
             module = new Module("cashloan");
             if (module.Exec(data))
             {
