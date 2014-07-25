@@ -8,13 +8,10 @@ using SAMAPILibrary.DataObjects.OutputData;
 
 namespace SAMAPILibrary.CalculationWrappers
 {
-    public class pvsam1
+    public static class pvsam1
     {
-        public pvsam1()
-        {
-        }
 
-        public SystemModelOutput run(DataObjects.GISData gis, DataObjects.ArrayParamsUser array)
+        public static SystemModelOutput run(DataObjects.GISData gis, DataObjects.ArrayParamsUser array)
         {
             Data data = new Data();
             Module module = new Module("pvsamv1");

@@ -4,241 +4,243 @@ using System.Linq;
 using System.Text;
 using SAMAPILibrary.SAMAPI;
 using SAMAPILibrary.DataObjects.OutputData;
+using SAMAPILibrary.CalculationWrappers;
+using SAMAPILibrary.FinancialModels;
 
 namespace SAMAPILibrary.DataObjects.FinancialModels
 {
-    class CashloanParams : IDataParamSetter{
+    class CashLoanParams : IDataParamSetter{
 
 
         /// <summary>
         /// Federal tax rate as percent (e.g. 28% = 28)
         /// </summary>
-        public float federal_tax_rate;
+        public readonly float federal_tax_rate;
 
         /// <summary>
         /// State tax rate as percent (e.g. 28% = 28)
         /// </summary>
-        public float state_tax_rate;
+        public readonly float state_tax_rate;
 
         /// <summary>
         /// Property tax rate as percent (e.g. 28% = 28)
         /// </summary>
-        public float property_tax_rate;
+        public readonly float property_tax_rate;
 
         /// <summary>
         /// Percent of property value assessed
         /// </summary>
-        public float prop_tax_cost_assessed_percent;
+        public readonly float prop_tax_cost_assessed_percent;
 
         /// <summary>
         /// Percent decline in assessed value (annual)
         /// </summary>
-        public float prop_tax_assessed_decline;
+        public readonly float prop_tax_assessed_decline;
 
         /// <summary>
         /// Sales tax rate as percent (e.g. 28% = 28)
         /// </summary>
-        public float sales_tax_rate;
+        public readonly float sales_tax_rate;
 
         /// <summary>
         /// Real discount rate as percent
         /// </summary>
-        public float real_discount_rate;
+        public readonly float real_discount_rate;
 
         /// <summary>
         /// Annual inflation rate as percent
         /// </summary>
-        public float inflation_rate;
+        public readonly float inflation_rate;
 
         /// <summary>
         /// Insurance rate as percent of total system cost
         /// </summary>
-        public float insurance_rate;
+        public readonly float insurance_rate;
 
         /// <summary>
         /// Total system capacity
         /// </summary>
-        public float system_capacity;
+        public readonly float system_capacity;
 
         /// <summary>
         /// 
         /// </summary>
-        public float system_heat_rate;
+        public readonly float system_heat_rate;
 
         /// <summary>
         /// Duration of mortgage
         /// </summary>
-        public int loan_term;
+        public readonly int loan_term;
 
         /// <summary>
         /// Mortgage rate
         /// </summary>
-        public float loan_rate;
+        public readonly float loan_rate;
 
         /// <summary>
         /// Percent of system cost that loan is taken for
         /// </summary>
-        public float loan_debt;
+        public readonly float loan_debt;
 
         /// <summary>
         /// Residential (0) or Commercial (1) market type
         /// </summary>
-        public int market;
+        public readonly int market;
 
         /// <summary>
         /// Boolean (0/1) is it a mortgage loan?  Affects taxability of interest payments.
         /// </summary>
-        public int mortgage;
+        public readonly int mortgage;
 
         /// <summary>
         /// Total installed system cost
         /// </summary>
-        public float total_installed_cost;
+        public readonly float total_installed_cost;
 
         /// <summary>
         /// Percent of initial cost sytem can be sold for at end of analysis
         /// </summary>
-        public float salvage_percentage;
+        public readonly float salvage_percentage;
 
         //O&M Costs
-        public float[] om_fixed;
-        public float om_fixed_escal;
-        public float[] om_production;
-        public float om_production_escal;
-        public float[] om_capacity;
-        public float om_capacity_escal;
-        public float[] om_fuel_cost;
-        public float om_fuel_cost_escal;
-        public float annual_fuel_usage;
+        public readonly float[] om_fixed;
+        public readonly float om_fixed_escal;
+        public readonly float[] om_production;
+        public readonly float om_production_escal;
+        public readonly float[] om_capacity;
+        public readonly float om_capacity_escal;
+        public readonly float[] om_fuel_cost;
+        public readonly float om_fuel_cost_escal;
+        public readonly float annual_fuel_usage;
 
         //Investment Tax Credits
-        public float itc_fed_amount;
-        public int itc_fed_amount_deprbas_fed;
-        public int itc_fed_amount_deprbas_sta;
-        public float itc_sta_amount;
-        public int itc_sta_amount_deprbas_fed;
-        public int itc_sta_amount_deprbas_sta;
-        public float itc_fed_percent;
-        public float itc_fed_percent_maxvalue;
-        public int itc_fed_percent_deprbas_fed;
-        public int itc_fed_percent_deprbas_sta;
-        public float itc_sta_percent;
-        public float itc_sta_percent_maxvalue;
-        public int itc_sta_percent_deprbas_fed;
-        public int itc_sta_percent_deprbas_sta;
+        public readonly float itc_fed_amount;
+        public readonly int itc_fed_amount_deprbas_fed;
+        public readonly int itc_fed_amount_deprbas_sta;
+        public readonly float itc_sta_amount;
+        public readonly int itc_sta_amount_deprbas_fed;
+        public readonly int itc_sta_amount_deprbas_sta;
+        public readonly float itc_fed_percent;
+        public readonly float itc_fed_percent_maxvalue;
+        public readonly int itc_fed_percent_deprbas_fed;
+        public readonly int itc_fed_percent_deprbas_sta;
+        public readonly float itc_sta_percent;
+        public readonly float itc_sta_percent_maxvalue;
+        public readonly int itc_sta_percent_deprbas_fed;
+        public readonly int itc_sta_percent_deprbas_sta;
 
         //Production Tax Credit
-        public float[] ptc_fed_amount;
-        public int ptc_fed_term;
-        public float ptc_fed_escal;
-        public float[] ptc_sta_amount;
-        public int ptc_sta_term;
-        public float ptc_sta_escal;
+        public readonly float[] ptc_fed_amount;
+        public readonly int ptc_fed_term;
+        public readonly float ptc_fed_escal;
+        public readonly float[] ptc_sta_amount;
+        public readonly int ptc_sta_term;
+        public readonly float ptc_sta_escal;
 
         //Investment Based Incentives
-        public float ibi_fed_amount;
-        public int ibi_fed_amount_tax_fed;
-        public int ibi_fed_amount_tax_sta;
-        public int ibi_fed_amount_deprbas_fed;
-        public int ibi_fed_amount_deprbas_sta;
-        public float ibi_sta_amount;
-        public int ibi_sta_amount_tax_fed;
-        public int ibi_sta_amount_tax_sta;
-        public int ibi_sta_amount_deprbas_fed;
-        public int ibi_sta_amount_deprbas_sta;
-        public float ibi_uti_amount;
-        public int ibi_uti_amount_tax_fed;
-        public int ibi_uti_amount_tax_sta;
-        public int ibi_uti_amount_deprbas_fed;
-        public int ibi_uti_amount_deprbas_sta;
-        public float ibi_oth_amount;
-        public int ibi_oth_amount_tax_fed;
-        public int ibi_oth_amount_tax_sta;
-        public int ibi_oth_amount_deprbas_fed;
-        public int ibi_oth_amount_deprbas_sta;
-        public float ibi_fed_percent;
-        public float ibi_fed_percent_maxvalue;
-        public int ibi_fed_percent_tax_fed;
-        public int ibi_fed_percent_tax_sta;
-        public int ibi_fed_percent_deprbas_fed;
-        public int ibi_fed_percent_deprbas_sta;
-        public float ibi_sta_percent;
-        public float ibi_sta_percent_maxvalue;
-        public int ibi_sta_percent_tax_fed;
-        public int ibi_sta_percent_tax_sta;
-        public int ibi_sta_percent_deprbas_fed;
-        public int ibi_sta_percent_deprbas_sta;
-        public float ibi_uti_percent;
-        public float ibi_uti_percent_maxvalue;
-        public int ibi_uti_percent_tax_fed;
-        public int ibi_uti_percent_tax_sta;
-        public int ibi_uti_percent_deprbas_fed;
-        public int ibi_uti_percent_deprbas_sta;
-        public float ibi_oth_percent;
-        public float ibi_oth_percent_maxvalue;
-        public int ibi_oth_percent_tax_fed;
-        public int ibi_oth_percent_tax_sta;
-        public int ibi_oth_percent_deprbas_fed;
-        public int ibi_oth_percent_deprbas_sta;
+        public readonly float ibi_fed_amount;
+        public readonly int ibi_fed_amount_tax_fed;
+        public readonly int ibi_fed_amount_tax_sta;
+        public readonly int ibi_fed_amount_deprbas_fed;
+        public readonly int ibi_fed_amount_deprbas_sta;
+        public readonly float ibi_sta_amount;
+        public readonly int ibi_sta_amount_tax_fed;
+        public readonly int ibi_sta_amount_tax_sta;
+        public readonly int ibi_sta_amount_deprbas_fed;
+        public readonly int ibi_sta_amount_deprbas_sta;
+        public readonly float ibi_uti_amount;
+        public readonly int ibi_uti_amount_tax_fed;
+        public readonly int ibi_uti_amount_tax_sta;
+        public readonly int ibi_uti_amount_deprbas_fed;
+        public readonly int ibi_uti_amount_deprbas_sta;
+        public readonly float ibi_oth_amount;
+        public readonly int ibi_oth_amount_tax_fed;
+        public readonly int ibi_oth_amount_tax_sta;
+        public readonly int ibi_oth_amount_deprbas_fed;
+        public readonly int ibi_oth_amount_deprbas_sta;
+        public readonly float ibi_fed_percent;
+        public readonly float ibi_fed_percent_maxvalue;
+        public readonly int ibi_fed_percent_tax_fed;
+        public readonly int ibi_fed_percent_tax_sta;
+        public readonly int ibi_fed_percent_deprbas_fed;
+        public readonly int ibi_fed_percent_deprbas_sta;
+        public readonly float ibi_sta_percent;
+        public readonly float ibi_sta_percent_maxvalue;
+        public readonly int ibi_sta_percent_tax_fed;
+        public readonly int ibi_sta_percent_tax_sta;
+        public readonly int ibi_sta_percent_deprbas_fed;
+        public readonly int ibi_sta_percent_deprbas_sta;
+        public readonly float ibi_uti_percent;
+        public readonly float ibi_uti_percent_maxvalue;
+        public readonly int ibi_uti_percent_tax_fed;
+        public readonly int ibi_uti_percent_tax_sta;
+        public readonly int ibi_uti_percent_deprbas_fed;
+        public readonly int ibi_uti_percent_deprbas_sta;
+        public readonly float ibi_oth_percent;
+        public readonly float ibi_oth_percent_maxvalue;
+        public readonly int ibi_oth_percent_tax_fed;
+        public readonly int ibi_oth_percent_tax_sta;
+        public readonly int ibi_oth_percent_deprbas_fed;
+        public readonly int ibi_oth_percent_deprbas_sta;
 
         //Capacity Based Incentives
-        public float cbi_fed_amount;
-        public float cbi_fed_maxvalue;
-        public int cbi_fed_tax_fed;
-        public int cbi_fed_tax_sta;
-        public int cbi_fed_deprbas_fed;
-        public int cbi_fed_deprbas_sta;
-        public float cbi_sta_amount;
-        public float cbi_sta_maxvalue;
-        public int cbi_sta_tax_fed;
-        public int cbi_sta_tax_sta;
-        public int cbi_sta_deprbas_fed;
-        public int cbi_sta_deprbas_sta;
-        public float cbi_uti_amount;
-        public float cbi_uti_maxvalue;
-        public int cbi_uti_tax_fed;
-        public int cbi_uti_tax_sta;
-        public int cbi_uti_deprbas_fed;
-        public int cbi_uti_deprbas_sta;
-        public float cbi_oth_amount;
-        public float cbi_oth_maxvalue;
-        public int cbi_oth_tax_fed;
-        public int cbi_oth_tax_sta;
-        public int cbi_oth_deprbas_fed;
-        public int cbi_oth_deprbas_sta;
+        public readonly float cbi_fed_amount;
+        public readonly float cbi_fed_maxvalue;
+        public readonly int cbi_fed_tax_fed;
+        public readonly int cbi_fed_tax_sta;
+        public readonly int cbi_fed_deprbas_fed;
+        public readonly int cbi_fed_deprbas_sta;
+        public readonly float cbi_sta_amount;
+        public readonly float cbi_sta_maxvalue;
+        public readonly int cbi_sta_tax_fed;
+        public readonly int cbi_sta_tax_sta;
+        public readonly int cbi_sta_deprbas_fed;
+        public readonly int cbi_sta_deprbas_sta;
+        public readonly float cbi_uti_amount;
+        public readonly float cbi_uti_maxvalue;
+        public readonly int cbi_uti_tax_fed;
+        public readonly int cbi_uti_tax_sta;
+        public readonly int cbi_uti_deprbas_fed;
+        public readonly int cbi_uti_deprbas_sta;
+        public readonly float cbi_oth_amount;
+        public readonly float cbi_oth_maxvalue;
+        public readonly int cbi_oth_tax_fed;
+        public readonly int cbi_oth_tax_sta;
+        public readonly int cbi_oth_deprbas_fed;
+        public readonly int cbi_oth_deprbas_sta;
         
         //Production Based Incentives
-        public float[] pbi_fed_amount;
-        public int pbi_fed_term;
-        public float pbi_fed_escal;
-        public int pbi_fed_tax_fed;
-        public int pbi_fed_tax_sta;
-        public float[] pbi_sta_amount;
-        public int pbi_sta_term;
-        public float pbi_sta_escal;
-        public int pbi_sta_tax_fed;
-        public int pbi_sta_tax_sta;
-        public float[] pbi_uti_amount;
-        public int pbi_uti_term;
-        public float pbi_uti_escal;
-        public int pbi_uti_tax_fed;
-        public int pbi_uti_tax_sta;
-        public float[] pbi_oth_amount;
-        public int pbi_oth_term;
-        public float pbi_oth_escal;
-        public int pbi_oth_tax_fed;
-        public int pbi_oth_tax_sta;
+        public readonly float[] pbi_fed_amount;
+        public readonly int pbi_fed_term;
+        public readonly float pbi_fed_escal;
+        public readonly int pbi_fed_tax_fed;
+        public readonly int pbi_fed_tax_sta;
+        public readonly float[] pbi_sta_amount;
+        public readonly int pbi_sta_term;
+        public readonly float pbi_sta_escal;
+        public readonly int pbi_sta_tax_fed;
+        public readonly int pbi_sta_tax_sta;
+        public readonly float[] pbi_uti_amount;
+        public readonly int pbi_uti_term;
+        public readonly float pbi_uti_escal;
+        public readonly int pbi_uti_tax_fed;
+        public readonly int pbi_uti_tax_sta;
+        public readonly float[] pbi_oth_amount;
+        public readonly int pbi_oth_term;
+        public readonly float pbi_oth_escal;
+        public readonly int pbi_oth_tax_fed;
+        public readonly int pbi_oth_tax_sta;
 
         //Carryover
         public readonly int analysis_years;
         public readonly float[] energy_value;
         public readonly float[] energy_net;
 
-        public CashloanParams(UtilityRateOutput uro)
+        public CashLoanParams(ICashLoanInputs inputs)
         {
-            analysis_years = uro.analysis_years;
-            energy_value = uro.energy_value;
-            energy_net = uro.energy_net;        
+            analysis_years = inputs.getAnalysisYears();
+            energy_value = inputs.getAnnualValueOfNetEnergy();
+            energy_net = inputs.getAnnualNetEnergy();        
 
             federal_tax_rate = 28f;
             state_tax_rate = 7f;

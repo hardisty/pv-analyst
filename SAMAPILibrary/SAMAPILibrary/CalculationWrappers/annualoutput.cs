@@ -6,21 +6,18 @@ using SAMAPILibrary;
 using SAMAPILibrary.SAMAPI;
 using SAMAPILibrary.DataObjects.FinancialModels;
 using SAMAPILibrary.DataObjects.OutputData;
+using SAMAPILibrary.FinancialModels;
 
 namespace SAMAPILibrary.CalculationWrappers
 {
-    public class annualoutput
+    public static class annualoutput
     {
-        public annualoutput()
-        {
-        }
-
-        public AnnualOutputOutput run(SystemModelOutput smo)
+        public static AnnualOutputOutput run(IAnnualOutputInputs input)
         {
             Data data = new Data();
             Module module = new Module("annualoutput");
 
-            DegradationParams p = new DegradationParams(smo);
+            AnnualOutputParams p = new AnnualOutputParams(input);
             p.setDataParameters(data);
 
             if (module.Exec(data))

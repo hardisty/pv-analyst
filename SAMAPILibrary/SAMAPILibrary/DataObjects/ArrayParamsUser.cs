@@ -16,72 +16,72 @@ namespace SAMAPILibrary.DataObjects
         /// <summary>
         /// Use the ground albedo in the weather file? [Boolean (0/1)]
         /// </summary>
-        public int use_wf_albedo; //0 false, 1 true
+        public readonly int use_wf_albedo; //0 false, 1 true
         /// <summary>
         /// The ground albedo for each month (length 12)
         /// </summary>
-        public float[] albedo; // 0-1
+        public readonly float[] albedo; // 0-1
         /// <summary>
         /// The irradiation mode for the anisotropic model [0 - b&d, 1 - g&d]
         /// </summary>
-        public int irrad_mode; //0 beam & diffuse, 1 global & diffuse
+        public readonly int irrad_mode; //0 beam & diffuse, 1 global & diffuse
         /// <summary>
         /// The anisotropic sky model [0 - isotropic, 1 - HDKR, 2 - Perez]
         /// </summary>
-        public int sky_model; // 0 isotropic, 1 hdkr, 2 perez
+        public readonly int sky_model; // 0 isotropic, 1 hdkr, 2 perez
         /// <summary>
         /// The AC derate [from 0 to 1]
         /// </summary>
-        public float ac_derate; // 0-1
+        public readonly float ac_derate; // 0-1
         /// <summary>
         /// The soiling factor by month [from 0 to 1]
         /// </summary>
-        public float[] subarray1_soiling;
+        public readonly float[] subarray1_soiling;
         /// <summary>
         /// The Array derate [from 0 to 1]
         /// </summary>
-        public float subarray1_derate;    
+        public readonly float subarray1_derate;    
 
         /// <summary>
         /// The module performance model [0 - spe, 1 - 6paruser, 2 - cec]
         /// </summary>
-        public int module_model;
+        public readonly int module_model;
         /// <summary>
         /// The inverter performance model [0 - SNL, 1 - datasheet, 2 - partload]
         /// </summary>
-        public int inverter_model;
+        public readonly int inverter_model;
 
         //Parameters with permanent manual values
         /// <summary>
         /// Never use self-shading
         /// </summary>
-        public int self_shading_enabled = 0;
-        public float subarray2_tilt = 0;
-        public float subarray3_tilt = 0;
-        public float subarray4_tilt = 0;
+        public readonly int self_shading_enabled = 0;
+        public readonly float subarray2_tilt = 0;
+        public readonly float subarray3_tilt = 0;
+        public readonly float subarray4_tilt = 0;
         /// <summary>
         /// Never use tracking
         /// </summary>
-        public int subarray1_track_mode = 0; //0 fixed, 1 1axis, 2 2axis, 3 azimuth
+        public readonly int subarray1_track_mode = 0; //0 fixed, 1 1axis, 2 2axis, 3 azimuth
 
         //Non-SAM fields
         /// <summary>
         /// A module identifier, must correspond to an entry in the database
         /// </summary>
-        public String module_model_identifier; //Will be used to pull relevant model parameters from the file.
+        public readonly String module_model_identifier; //Will be used to pull relevant model parameters from the file.
         /// <summary>
         /// An automatically generated ModuleModelParams object
         /// </summary>
-        public ModuleModelParams module_params;
+        public readonly ModuleModelParams module_params;
 
         /// <summary>
         /// An inverter identifier, must correspond to an entry in the database
         /// </summary>
-        public String inverter_model_identifier;
+        public readonly String inverter_model_identifier;
         /// <summary>
         /// An automatically generated InverterModelParams object
         /// </summary>
-        public InverterModelParams inverter_params;
+        public readonly InverterModelParams inverter_params;
 
         public ArrayParamsUser()
         {

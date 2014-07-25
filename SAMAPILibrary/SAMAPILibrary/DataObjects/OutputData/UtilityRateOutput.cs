@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SAMAPILibrary.SAMAPI;
+using SAMAPILibrary.CalculationWrappers;
+using SAMAPILibrary.FinancialModels;
 
 namespace SAMAPILibrary.DataObjects.OutputData
 {
 
-    public class UtilityRateOutput
+    public class UtilityRateOutput: ICashLoanInputs
     {
         private Data data;
 
@@ -35,5 +37,21 @@ namespace SAMAPILibrary.DataObjects.OutputData
         {
             this.data = data;
         }
+
+        public int getAnalysisYears()
+        {
+            return analysis_years;
+        }
+
+        public float[] getAnnualValueOfNetEnergy()
+        {
+            return energy_value;
+        }
+
+        public float[] getAnnualNetEnergy()
+        {
+            return energy_net;
+        }
+
     }
 }

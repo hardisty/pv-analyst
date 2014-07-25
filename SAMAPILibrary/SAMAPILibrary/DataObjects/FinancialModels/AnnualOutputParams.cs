@@ -3,43 +3,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SAMAPILibrary.DataObjects.OutputData;
+using SAMAPILibrary.CalculationWrappers;
+using SAMAPILibrary.FinancialModels;
 
 namespace SAMAPILibrary.DataObjects.FinancialModels
 {
-    public class DegradationParams : IDataParamSetter
+    public class AnnualOutputParams : IDataParamSetter
     {
         /// <summary>
         /// Analysis period in years
         /// </summary>
-        public int analysis_years;
+        public readonly int analysis_years;
 
         /// <summary>
         /// Annual availability (as percent, 100 = 100%). Length = 12 or single value.
         /// </summary>
-        public float[] energy_availability;
+        public readonly float[] energy_availability;
 
         /// <summary>
         /// Annual degradation rate (as percent, 100 = 100%). Length = 12 or sing
         /// </summary>
-        public float[] energy_degradation;
+        public readonly float[] energy_degradation;
 
         /// <summary>
         /// First year hourly curtailment for each month (0-1). Dimensions should be 24/row, 12 rows.
         /// </summary>
-        public float[,] energy_curtailment;
+        public readonly float[,] energy_curtailment;
 
         /// <summary>
         /// True/false: output the lifetime hourly output
         /// </summary>
-        public int system_use_lifetime_output;
+        public readonly int system_use_lifetime_output = 0;
 
         /// <summary>
         /// The hourly irradiance in year 1
         /// </summary>
-        public float[] energy_net_hourly;
+        public readonly float[] energy_net_hourly;
 
-        public DegradationParams(SystemModelOutput smo)
+        public AnnualOutputParams(IAnnualOutputInputs input)
         {
+            energy_net_hourly = input.getHourlyElectricityProuction();
+
             //Defaults
             analysis_years = 25;
             energy_availability = new float[] { 100f };
@@ -57,8 +61,6 @@ namespace SAMAPILibrary.DataObjects.FinancialModels
                     { 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f }, 
                     { 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f }, 
                     { 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f } };//Dec
-            system_use_lifetime_output = 0;
-            energy_net_hourly = smo.ac_hourly;
         }
 
         public void setDataParameters(SAMAPI.Data data)

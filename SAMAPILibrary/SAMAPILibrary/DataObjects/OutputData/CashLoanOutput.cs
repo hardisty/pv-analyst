@@ -8,7 +8,7 @@ namespace SAMAPILibrary.DataObjects.OutputData
 {
     public class CashLoanOutput
     {
-        private Data data;
+        private readonly Data data;
 
         public float lcoe_real
         { 

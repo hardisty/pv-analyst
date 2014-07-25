@@ -5,21 +5,19 @@ using System.Text;
 using SAMAPILibrary.SAMAPI;
 using SAMAPILibrary.DataObjects.FinancialModels;
 using SAMAPILibrary.DataObjects.OutputData;
+using SAMAPILibrary.FinancialModels;
 
 namespace SAMAPILibrary.CalculationWrappers
 {
-    public class cashloan
+    public static class cashloan
     {
-        public cashloan()
-        {
-        }
 
-        public CashLoanOutput run(UtilityRateOutput uro)
+        public static CashLoanOutput run(ICashLoanInputs inputs)
         {
             Data data = new Data();
             Module module = new Module("cashloan");
 
-            CashloanParams p = new CashloanParams(uro);
+            CashLoanParams p = new CashLoanParams(inputs);
             p.setDataParameters(data);
 
             if (module.Exec(data))

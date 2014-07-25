@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SAMAPILibrary.SAMAPI;
+using SAMAPILibrary.CalculationWrappers;
+using SAMAPILibrary.FinancialModels;
 
 namespace SAMAPILibrary.DataObjects.OutputData
 {
-    public class AnnualOutputOutput
+    public class AnnualOutputOutput: IUtilityRateInputs
     {
-        private Data data;
+        private readonly Data data;
 
         public int analysis_years { 
             get { 
@@ -51,6 +53,26 @@ namespace SAMAPILibrary.DataObjects.OutputData
         public AnnualOutputOutput(Data data)
         {
             this.data = data;
+        }
+
+        public int getAnalysisYears()
+        {
+            return analysis_years;
+        }
+
+        public float[] getSystemAvailability()
+        {
+            return energy_availability;
+        }
+
+        public float[] getSystemDegradation()
+        {
+            return energy_degradation;
+        }
+
+        public float[] getHourlyElectricityProuction()
+        {
+            return net_hourly;
         }
     }
 }

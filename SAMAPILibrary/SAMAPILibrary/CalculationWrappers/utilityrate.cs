@@ -5,21 +5,19 @@ using System.Text;
 using SAMAPILibrary.SAMAPI;
 using SAMAPILibrary.DataObjects.FinancialModels;
 using SAMAPILibrary.DataObjects.OutputData;
+using SAMAPILibrary.FinancialModels;
 
 namespace SAMAPILibrary.CalculationWrappers
 {
-    public class utilityrate
+    public static class utilityrate
     {
-        public utilityrate()
-        {
-        }
 
-        public UtilityRateOutput run(AnnualOutputOutput aoo)
+        public static UtilityRateOutput run(IAnnualOutputInputs inputs)
         {
             Data data = new Data();
             Module module = new Module("utilityrate");
 
-            UtilityParams p = new UtilityParams(aoo);
+            UtilityRateParams p = new UtilityRateParams(inputs);
             p.setDataParameters(data);
 
             if (module.Exec(data))
