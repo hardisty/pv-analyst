@@ -12,12 +12,12 @@ namespace SAMAPILibrary.CalculationWrappers
     public static class cashloan
     {
 
-        public static CashLoanOutput run(ICashLoanInputs inputs)
+        public static CashLoanOutput run(ICashLoanInputs inputs,SizeAndCostParams sc)
         {
             Data data = new Data();
             Module module = new Module("cashloan");
 
-            CashLoanParams p = new CashLoanParams(inputs);
+            CashLoanParams p = new CashLoanParams(inputs,sc);
             p.setDataParameters(data);
 
             if (module.Exec(data))

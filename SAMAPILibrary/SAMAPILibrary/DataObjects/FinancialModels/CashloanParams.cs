@@ -236,11 +236,12 @@ namespace SAMAPILibrary.DataObjects.FinancialModels
         public readonly float[] energy_value;
         public readonly float[] energy_net;
 
-        public CashLoanParams(ICashLoanInputs inputs)
+        public CashLoanParams(ICashLoanInputs inputs, SizeAndCostParams costs)
         {
             analysis_years = inputs.getAnalysisYears();
             energy_value = inputs.getAnnualValueOfNetEnergy();
-            energy_net = inputs.getAnnualNetEnergy();        
+            energy_net = inputs.getAnnualNetEnergy();   
+            
 
             federal_tax_rate = 28f;
             state_tax_rate = 7f;
@@ -251,14 +252,14 @@ namespace SAMAPILibrary.DataObjects.FinancialModels
             real_discount_rate = 8f;
             inflation_rate = 2.5f;
             insurance_rate = 0f;
-            system_capacity = 3.8745f;
+            system_capacity = costs.dc_rating/1000;
             system_heat_rate = 0f;
             loan_term = 25;
             loan_rate = 7.5f;
             loan_debt = 100f;
             market = 0;
             mortgage = 0;
-            total_installed_cost = 22194.2f;
+            total_installed_cost = costs.total_costs; //22194.2f default
             salvage_percentage = 0f;
 
             //O&M
@@ -407,7 +408,7 @@ namespace SAMAPILibrary.DataObjects.FinancialModels
             data.SetNumber("inflation_rate", inflation_rate);
             data.SetNumber("insurance_rate", insurance_rate);
             data.SetNumber("system_capacity", system_capacity);
-            data.SetNumber("system_heat_rate", system_heat_rate);
+            //data.SetNumber("system_heat_rate", system_heat_rate);
             data.SetNumber("loan_term", loan_term);
             data.SetNumber("loan_rate", loan_rate);
             data.SetNumber("loan_debt", loan_debt);

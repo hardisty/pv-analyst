@@ -33,7 +33,31 @@ namespace SAMAPILibrary.DataObjects.OutputData
                 return data.GetNumber("annual_ac_net");
             }
         }
-
+        public float sys_dc_rating
+        {
+            get
+            {
+                return data.GetNumber("nameplate_dc_rating");
+            }
+        }
+        public float inv_ac_rating
+        {
+            get
+            {
+                int model = (int)data.GetNumber("inverter_model");
+                if (model==0){
+                    return data.GetNumber("inv_snl_paco");
+                }
+                else if (model == 1){
+                    return data.GetNumber("inv_ds_paco");
+                }
+                else if (model == 2)
+                {
+                    return data.GetNumber("inv_pd_paco");
+                }
+                throw new Exception();
+            }
+        }
         public SystemModelOutput(Data data)
         {
             this.data = data;

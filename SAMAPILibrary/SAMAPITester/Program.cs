@@ -27,9 +27,11 @@ namespace SAMAPITester
             GISData gis = new GISData();
             ArrayParamsUser array = new ArrayParamsUser();
             SystemModelOutput smo = pvsam1.run(gis,array);
+            SizeAndCostParams sc = new SizeAndCostParams(smo);
             AnnualOutputOutput aooData = annualoutput.run(smo);
             UtilityRateOutput uro = utilityrate.run(smo);
-            CashLoanOutput clo = cashloan.run(uro);
+            CashLoanOutput clo = cashloan.run(uro,sc);
+            Console.WriteLine(sc.total_costs);
 
             float[] ac_hourly = smo.ac_hourly;
             float[] ac_monthly = smo.ac_monthly;
