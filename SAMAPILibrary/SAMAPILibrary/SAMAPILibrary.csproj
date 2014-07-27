@@ -40,15 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CalculationWrappers\annualoutput.cs" />
-    <Compile Include="CalculationWrappers\cashloan.cs" />
-    <Compile Include="CalculationWrappers\Financial.cs" />
+    <Compile Include="CalculationWrappers\Executables\annualoutput.cs" />
+    <Compile Include="CalculationWrappers\Executables\cashloan.cs" />
+    <Compile Include="CalculationWrappers\InputParams.cs" />
+    <Compile Include="CalculationWrappers\ModelPVSystem.cs" />
+    <Compile Include="DataObjects\ArrayParamsSimple.cs" />
+    <Compile Include="DataObjects\FinancialModels\FinancialParamsSimple.cs" />
     <Compile Include="DataObjects\FinancialModels\SizeAndCostParams.cs" />
     <Compile Include="DataObjects\FinancialModels\IAnnualOutputInputs.cs" />
     <Compile Include="DataObjects\FinancialModels\ICashLoanInputs.cs" />
     <Compile Include="DataObjects\FinancialModels\IUtilityRateInputs.cs" />
-    <Compile Include="CalculationWrappers\pvsam1.cs" />
-    <Compile Include="CalculationWrappers\utilityrate.cs" />
+    <Compile Include="CalculationWrappers\Executables\pvsam1.cs" />
+    <Compile Include="CalculationWrappers\Executables\utilityrate.cs" />
     <Compile Include="DataObjects\ArrayParamsUser.cs" />
     <Compile Include="DataObjects\ArrayParams.cs" />
     <Compile Include="DataObjects\FinancialModels\CashLoanParams.cs" />

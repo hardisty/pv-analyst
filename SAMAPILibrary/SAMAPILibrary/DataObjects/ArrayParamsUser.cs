@@ -83,8 +83,25 @@ namespace SAMAPILibrary.DataObjects
         /// </summary>
         public readonly InverterModelParams inverter_params;
 
+
         public ArrayParamsUser()
+            : this(new ArrayParamsSimple("default", "default")) { }
+
+        public ArrayParamsUser(ArrayParamsSimple array):this(0)
         {
+            module_model_identifier = array.module_model_identifier;
+            inverter_model_identifier = array.inverter_model_identifier;
+            //Get the appropriate ones based on the identifiers
+            module_model = 1;
+            inverter_model = 0;
+
+            inverter_params = InverterModelParams.getInverterParams(inverter_model, inverter_model_identifier);
+            module_params = ModuleModelParams.getModuleParams(module_model, module_model_identifier);
+        }
+
+        private ArrayParamsUser(int i)
+        {
+
             //defaults
             use_wf_albedo = 1; // Use it
             albedo = new float[] { 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f };
@@ -95,15 +112,9 @@ namespace SAMAPILibrary.DataObjects
             subarray1_soiling = new float[] { 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f };
             subarray1_derate = 0.955598f;
 
-            module_model = 1;
-            module_model_identifier = "default";
-            module_params = ModuleModelParams.getModuleParams(module_model, module_model_identifier);
-            
-
-            inverter_model = 0;
-            inverter_model_identifier = "default";
-            inverter_params = InverterModelParams.getInverterParams(inverter_model, inverter_model_identifier);
         }
+
+
 
 
         public void setDataParameters(SAMAPI.Data data)

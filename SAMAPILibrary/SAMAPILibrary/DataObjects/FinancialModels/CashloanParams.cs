@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using SAMAPILibrary.SAMAPI;
 using SAMAPILibrary.DataObjects.OutputData;
-using SAMAPILibrary.CalculationWrappers;
+using SAMAPILibrary.CalculationWrappers.Executables;
 using SAMAPILibrary.FinancialModels;
 
 namespace SAMAPILibrary.DataObjects.FinancialModels
 {
-    class CashLoanParams : IDataParamSetter{
+    public class CashLoanParams : IDataParamSetter{
 
 
         /// <summary>
@@ -236,13 +236,19 @@ namespace SAMAPILibrary.DataObjects.FinancialModels
         public readonly float[] energy_value;
         public readonly float[] energy_net;
 
-        public CashLoanParams(ICashLoanInputs inputs, SizeAndCostParams costs)
+        public CashLoanParams(FinancialParamsSimple financialParams, ICashLoanInputs inputs, SizeAndCostParams costs):this(inputs,costs)
         {
             analysis_years = inputs.getAnalysisYears();
             energy_value = inputs.getAnnualValueOfNetEnergy();
-            energy_net = inputs.getAnnualNetEnergy();   
-            
+            energy_net = inputs.getAnnualNetEnergy();
 
+            loan_term = financialParams.loan_term;
+            loan_rate = financialParams.loan_rate;
+            loan_debt = financialParams.loan_debt;
+        }
+
+        private CashLoanParams(SizeAndCostParams costs)
+        {
             federal_tax_rate = 28f;
             state_tax_rate = 7f;
             property_tax_rate = 0f;
@@ -252,11 +258,9 @@ namespace SAMAPILibrary.DataObjects.FinancialModels
             real_discount_rate = 8f;
             inflation_rate = 2.5f;
             insurance_rate = 0f;
-            system_capacity = costs.dc_rating/1000;
+            system_capacity = costs.dc_rating / 1000;
             system_heat_rate = 0f;
-            loan_term = 25;
-            loan_rate = 7.5f;
-            loan_debt = 100f;
+
             market = 0;
             mortgage = 0;
             total_installed_cost = costs.total_costs; //22194.2f default
@@ -390,6 +394,18 @@ namespace SAMAPILibrary.DataObjects.FinancialModels
             pbi_oth_escal = 0f;
             pbi_oth_tax_fed = 1;
             pbi_oth_tax_sta = 1;
+        }
+
+        public CashLoanParams(ICashLoanInputs inputs, SizeAndCostParams costs):this(costs)
+        {
+            analysis_years = inputs.getAnalysisYears();
+            energy_value = inputs.getAnnualValueOfNetEnergy();
+            energy_net = inputs.getAnnualNetEnergy();
+
+            loan_term = 25;
+            loan_rate = 7.5f;
+            loan_debt = 100f;
+            
         }
 
         public void  setDataParameters(Data data)

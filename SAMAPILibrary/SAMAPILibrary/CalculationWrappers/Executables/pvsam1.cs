@@ -2,27 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SAMAPILibrary;
 using SAMAPILibrary.SAMAPI;
-using SAMAPILibrary.DataObjects.FinancialModels;
+using SAMAPILibrary.DataObjects;
 using SAMAPILibrary.DataObjects.OutputData;
-using SAMAPILibrary.FinancialModels;
 
-namespace SAMAPILibrary.CalculationWrappers
+namespace SAMAPILibrary.CalculationWrappers.Executables
 {
-    public static class annualoutput
+    public static class pvsam1
     {
-        public static AnnualOutputOutput run(IAnnualOutputInputs input)
+
+        public static SystemModelOutput run(DataObjects.GISData gis, DataObjects.ArrayParamsUser array)
         {
             Data data = new Data();
-            Module module = new Module("annualoutput");
+            Module module = new Module("pvsamv1");
 
-            AnnualOutputParams p = new AnnualOutputParams(input);
-            p.setDataParameters(data);
+            ArrayParams allarray = new ArrayParams(array, new ArrayParamsComputed(gis, array));
+            allarray.setDataParameters(data);
 
             if (module.Exec(data))
             {
-                return new AnnualOutputOutput(data);
+                return new SystemModelOutput(data);
             }
             else
             {
@@ -38,10 +37,10 @@ namespace SAMAPILibrary.CalculationWrappers
                     Console.WriteLine("[ " + stype + " at time:" + time + " ]: " + msg + "\n");
                     idx++;
                 }
-                Console.WriteLine("annualoutput failed\n");
-
+                Console.WriteLine("pvsam1 failed\n");
                 return null;
             }
+
         }
     }
 }

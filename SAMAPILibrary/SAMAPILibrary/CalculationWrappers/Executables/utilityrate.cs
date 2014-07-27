@@ -7,22 +7,21 @@ using SAMAPILibrary.DataObjects.FinancialModels;
 using SAMAPILibrary.DataObjects.OutputData;
 using SAMAPILibrary.FinancialModels;
 
-namespace SAMAPILibrary.CalculationWrappers
+namespace SAMAPILibrary.CalculationWrappers.Executables
 {
-    public static class cashloan
+    public static class utilityrate
     {
 
-        public static CashLoanOutput run(ICashLoanInputs inputs,SizeAndCostParams sc)
+        public static UtilityRateOutput run(UtilityRateParams utilparams)
         {
             Data data = new Data();
-            Module module = new Module("cashloan");
+            Module module = new Module("utilityrate");
 
-            CashLoanParams p = new CashLoanParams(inputs,sc);
-            p.setDataParameters(data);
+            utilparams.setDataParameters(data);
 
             if (module.Exec(data))
             {
-                return new CashLoanOutput(data);
+                return new UtilityRateOutput(data);
             }
             else
             {
@@ -38,7 +37,7 @@ namespace SAMAPILibrary.CalculationWrappers
                     Console.WriteLine("[ " + stype + " at time:" + time + " ]: " + msg + "\n");
                     idx++;
                 }
-                Console.WriteLine("cashloan failed\n");
+                Console.WriteLine("utilityrate failed\n");
 
                 return null;
             }

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SAMAPILibrary.SAMAPI;
-using SAMAPILibrary.CalculationWrappers;
+using SAMAPILibrary.CalculationWrappers.Executables;
 using SAMAPILibrary.DataObjects;
 using SAMAPILibrary.DataObjects.FinancialModels;
 using SAMAPILibrary.DataObjects.OutputData;
+using SAMAPILibrary.CalculationWrappers;
 
 namespace SAMAPITester
 {
@@ -15,9 +16,21 @@ namespace SAMAPITester
         static void Main(string[] args)
         {
             
-            PVSAM();
-            CustomSAMImplementation();
+            //PVSAM();
+            CustomSAMImplementationWrapped();
 
+        }
+        static void CustomSAMImplementationWrapped()
+        {
+            ArrayParamsSimple aps = new ArrayParamsSimple("default", "default");
+            FinancialParamsSimple fps = new FinancialParamsSimple(25, 7.5f, 100);
+            GISData gis = new GISData();
+
+            InputParams ip = new InputParams(gis, aps, fps);
+
+            ModelPVSystem mp = new ModelPVSystem(ip);
+            
+            Console.WriteLine("Net Present Value: $" + mp.getNetPresentValue());
         }
 
         static void CustomSAMImplementation()
@@ -28,9 +41,24 @@ namespace SAMAPITester
             ArrayParamsUser array = new ArrayParamsUser();
             SystemModelOutput smo = pvsam1.run(gis,array);
             SizeAndCostParams sc = new SizeAndCostParams(smo);
-            AnnualOutputOutput aooData = annualoutput.run(smo);
-            UtilityRateOutput uro = utilityrate.run(smo);
-            CashLoanOutput clo = cashloan.run(uro,sc);
+            
+            AnnualOutputOutput aooData = annualoutput.run(new AnnualOutputParams(smo));
+            
+            UtilityRateParams up = new UtilityRateParams(smo);
+            UtilityRateOutput uro = utilityrate.run(up);
+            CashLoanParams clp = new CashLoanParams(uro, sc);
+            CashLoanOutput LoanOutput = cashloan.run(clp);
+
+            Console.WriteLine();
+            Console.WriteLine("Total System Cost: $"+sc.total_costs);
+            Console.WriteLine("System DC Rating: " + sc.dc_rating + " W");
+            Console.WriteLine("Net Present Value: $" + LoanOutput.npv);
+
+
+            
+            
+            
+            /** Comparison with SAM
             Console.WriteLine(sc.total_costs);
 
             float[] ac_hourly = smo.ac_hourly;
@@ -73,6 +101,7 @@ namespace SAMAPITester
             Console.WriteLine("LCOE real (cents/kWh) = " + lcoe_real + "\n");
             Console.WriteLine("LCOE nominal (cents/kWh) = " + lcoe_nom + "\n");
             Console.WriteLine("NPV = $" + npv + "\n");
+             */
         }
 
         static void pvWattsTest()
