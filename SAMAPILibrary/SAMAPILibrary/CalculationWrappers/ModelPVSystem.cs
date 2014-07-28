@@ -39,5 +39,10 @@ namespace SAMAPILibrary.CalculationWrappers
         {
             return LoanOutput.npv;
         }
+
+        public float getYearOneOutput()
+        {
+            return SystemOutput.ac_annual;
+        }
     }
 }

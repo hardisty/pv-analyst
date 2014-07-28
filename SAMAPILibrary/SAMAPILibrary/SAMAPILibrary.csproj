@@ -42,16 +42,22 @@
   <ItemGroup>
     <Compile Include="CalculationWrappers\Executables\annualoutput.cs" />
     <Compile Include="CalculationWrappers\Executables\cashloan.cs" />
+    <Compile Include="CalculationWrappers\Executables\pvsamrw.cs" />
     <Compile Include="CalculationWrappers\InputParams.cs" />
     <Compile Include="CalculationWrappers\ModelPVSystem.cs" />
     <Compile Include="DataHandling\ArrayParameterList.cs" />
+    <Compile Include="DataHandling\ArrayParametersComputedList.cs" />
+    <Compile Include="DataHandling\DefaultFloatArrayParameter.cs" />
     <Compile Include="DataHandling\DefaultFloatParameter.cs" />
     <Compile Include="DataHandling\DefaultParameter.cs" />
+    <Compile Include="DataHandling\DefaultStringParameter.cs" />
+    <Compile Include="DataHandling\FloatArrayParameter.cs" />
     <Compile Include="DataHandling\FloatParameter.cs" />
     <Compile Include="DataHandling\IDefaultParameter.cs" />
     <Compile Include="DataHandling\IParameter.cs" />
     <Compile Include="DataHandling\Parameter.cs" />
     <Compile Include="DataHandling\ParameterList.cs" />
+    <Compile Include="DataHandling\StringParameter.cs" />
     <Compile Include="DataObjects\ArrayParamsSimple.cs" />
     <Compile Include="DataObjects\FinancialModels\FinancialParamsSimple.cs" />
     <Compile Include="DataObjects\FinancialModels\SizeAndCostParams.cs" />

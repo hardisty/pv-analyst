@@ -5,15 +5,14 @@ using System.Text;
 
 namespace SAMAPILibrary.DataHandling
 {
-    abstract class DefaultParameter: Parameter,IDefaultParameter
-    {
-    }
 
-    abstract class DefaultParameter<T>: Parameter<T>, IDefaultParameter<T>
+    public abstract class DefaultParameter<T>: Parameter<T>, IDefaultParameter<T>, IDefaultParameter
     {
+        public readonly string description;
 
-        public DefaultParameter(string name, string description, T value) : base(name, description, value) 
+        public DefaultParameter(string name, string description, T value) : base(name, value) 
         {
+            this.description = description;
         }
         public abstract bool validate(Parameter<T> p);
     }

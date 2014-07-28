@@ -39,9 +39,11 @@ namespace SAMAPILibrary.DataObjects.ModuleModels
         public readonly float cec_array_rows;
         public readonly float cec_array_cols;
         public readonly float cec_backside_temp;
+        public readonly float module_model;
 
         public CECModuleModel(String module_model_identifier)
         {
+            module_model = 1;
             if (module_model_identifier == "default")
             {
                 // SunPower SPR-210-BLK-U
@@ -84,6 +86,7 @@ namespace SAMAPILibrary.DataObjects.ModuleModels
 
         public override void setDataParameters(Data data)
         {
+            data.SetNumber("module_model", module_model);
             data.SetNumber("cec_area", cec_area);
             data.SetNumber("cec_a_ref", cec_a_ref);
             data.SetNumber("cec_adjust", cec_adjust);

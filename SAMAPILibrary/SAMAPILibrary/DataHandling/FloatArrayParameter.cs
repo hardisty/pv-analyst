@@ -6,13 +6,13 @@ using SAMAPILibrary.SAMAPI;
 
 namespace SAMAPILibrary.DataHandling
 {
-    class FloatParameter : Parameter<float>, IParameter
+    public class FloatArrayParameter: Parameter<float[]>
     {
-        FloatParameter(string name, float value):base(name, value){}
-        
+        public FloatArrayParameter(string name, float[] value):base(name, value){}
+
         public override void setValue(Data data)
         {
-            data.SetNumber(name, value);
+            data.SetArray(name, value);
         }
     }
 }

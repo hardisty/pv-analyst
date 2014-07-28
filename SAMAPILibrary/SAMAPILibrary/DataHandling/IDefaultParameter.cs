@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SAMAPILibrary.DataHandling
 {
-    interface IDefaultParameter
+    public interface IDefaultParameter:IParameter
     {
     }
     interface IDefaultParameter<T>:IParameter<T>

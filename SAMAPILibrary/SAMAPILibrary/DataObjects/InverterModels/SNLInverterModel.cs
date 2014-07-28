@@ -20,8 +20,11 @@ namespace SAMAPILibrary.DataObjects.InverterModels
         public readonly float inv_snl_pso;
         public readonly float inv_snl_vdco;
         public readonly float inv_snl_vdcmax;
+        public readonly float inverter_model;
 
         public SNLInverterModel(String inverter_model_identifier){
+
+            inverter_model = 0;
 
             if (inverter_model_identifier == "default")
             {
@@ -46,6 +49,7 @@ namespace SAMAPILibrary.DataObjects.InverterModels
 
         public override void setDataParameters(SAMAPI.Data data)
         {
+            data.SetNumber("inverter_model",inverter_model);
             data.SetNumber("inv_snl_c0", inv_snl_c0);
             data.SetNumber("inv_snl_c1", inv_snl_c1);
             data.SetNumber("inv_snl_c2", inv_snl_c2);

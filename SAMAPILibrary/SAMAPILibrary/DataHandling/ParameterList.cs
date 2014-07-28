@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SAMAPILibrary.SAMAPI;
 
 namespace SAMAPILibrary.DataHandling
 {
-    abstract class ParameterList
+    public abstract class ParameterList
     {
-        Dictionary<string,DefaultParameter> defaults;
-        Dictionary<string,Parameter> parameters;
+        protected Dictionary<string,IDefaultParameter> defaults;
+        protected Dictionary<string,IParameter> parameters;
 
-        ParameterList(List<Parameter> input)
+        public ParameterList(IEnumerable<IParameter> input, Dictionary<string, IDefaultParameter> defaults)
         {
-            parameters = new Dictionary<string,Parameter>();
-            foreach (Parameter inp in input)
+            this.defaults = defaults;
+            parameters = new Dictionary<string,IParameter>();
+            foreach (IParameter inp in input)
             {
-                
-                parameters.Add(inp.name,inp);
-
+                parameters.Add(inp.name, inp);
             }
 
             fillDefaults();
@@ -31,6 +31,14 @@ namespace SAMAPILibrary.DataHandling
                 {
                     parameters.Add(key,defaults[key]);
                 }
+            }
+        }
+
+        public virtual void setValues(Data data)
+        {
+            foreach (IParameter p in parameters.Values)
+            {
+                p.setValue(data);
             }
         }
 

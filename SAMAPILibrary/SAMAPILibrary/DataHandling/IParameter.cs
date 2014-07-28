@@ -6,12 +6,15 @@ using SAMAPILibrary.SAMAPI;
 
 namespace SAMAPILibrary.DataHandling
 {
-    interface IParameter
+    public interface IParameter
     {
+        string name { get; }
+        void setValue(Data data);
     }
 
-    interface IParameter<T>
+    public interface IParameter<T>
     {
+        string name { get; }
         void setValue(Data data);
         T getValue();
     }

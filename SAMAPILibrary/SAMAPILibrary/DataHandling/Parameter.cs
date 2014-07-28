@@ -6,21 +6,16 @@ using SAMAPILibrary.SAMAPI;
 
 namespace SAMAPILibrary.DataHandling
 {
-    abstract class Parameter
-    {
-        public string name;
-    }
 
-    abstract class Parameter<T>: IParameter<T>
+    public abstract class Parameter<T>: IParameter<T>, IParameter
     {
-        public readonly String name;
-        public readonly String description;
+        private String _name;
+        public String name { get { return _name; } set { _name = value; } }
         public readonly T value;
 
-        public Parameter(string name, string description, T value)
+        public Parameter(string name, T value)
         {
-            this.name = name;
-            this.description = description;
+            this._name = name;
             this.value = value;
         }
 

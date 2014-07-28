@@ -8,6 +8,7 @@ using SAMAPILibrary.DataObjects;
 using SAMAPILibrary.DataObjects.FinancialModels;
 using SAMAPILibrary.DataObjects.OutputData;
 using SAMAPILibrary.CalculationWrappers;
+using SAMAPILibrary.DataHandling;
 
 namespace SAMAPITester
 {
@@ -18,8 +19,18 @@ namespace SAMAPITester
             
             //PVSAM();
             CustomSAMImplementationWrapped();
+            SAMRewriteTest();
 
         }
+        static void SAMRewriteTest()
+        {
+            List<IParameter> l = new List<IParameter>() { new FloatArrayParameter("subarray1_soiling", new float[] { 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f }) };
+            ArrayParameterList apl = new ArrayParameterList(l);
+            GISData gis = new GISData();
+            SystemModelOutput smo = pvsamrw.run(gis,apl);
+            Console.WriteLine("Year One Power Produced: " + smo.ac_annual);
+        }
+
         static void CustomSAMImplementationWrapped()
         {
             ArrayParamsSimple aps = new ArrayParamsSimple("default", "default");
@@ -29,7 +40,8 @@ namespace SAMAPITester
             InputParams ip = new InputParams(gis, aps, fps);
 
             ModelPVSystem mp = new ModelPVSystem(ip);
-            
+
+            Console.WriteLine("Year One Power Produced: "+mp.getYearOneOutput());
             Console.WriteLine("Net Present Value: $" + mp.getNetPresentValue());
         }
 
