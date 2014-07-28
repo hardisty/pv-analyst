@@ -44,6 +44,8 @@
     <Compile Include="CalculationWrappers\Executables\cashloan.cs" />
     <Compile Include="CalculationWrappers\InputParams.cs" />
     <Compile Include="CalculationWrappers\ModelPVSystem.cs" />
+    <Compile Include="DataHandling\DefaultParameter.cs" />
+    <Compile Include="DataHandling\Parameter.cs" />
     <Compile Include="DataObjects\ArrayParamsSimple.cs" />
     <Compile Include="DataObjects\FinancialModels\FinancialParamsSimple.cs" />
     <Compile Include="DataObjects\FinancialModels\SizeAndCostParams.cs" />
