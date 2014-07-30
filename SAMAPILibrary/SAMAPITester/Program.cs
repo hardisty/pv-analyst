@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SAMAPILibrary.SAMAPI;
-using SAMAPILibrary.CalculationWrappers.Executables;
 using SAMAPILibrary.DataObjects;
-using SAMAPILibrary.DataObjects.FinancialModels;
 using SAMAPILibrary.DataObjects.OutputData;
 using SAMAPILibrary.CalculationWrappers;
 using SAMAPILibrary.DataHandling;
@@ -19,7 +17,6 @@ namespace SAMAPITester
         {
             
             //PVSAM();
-            CustomSAMImplementationWrapped();
             SAMRewriteTest();
 
         }
@@ -49,92 +46,6 @@ namespace SAMAPITester
             Console.WriteLine("Year One Power Produced: " + smo.ac_annual);
             Console.WriteLine("Value of energy in Year 1: $" + uro.getAnnualValueOfNetEnergy()[0]);
             Console.WriteLine("Net Present Value: $" + clo.npv);
-        }
-
-        static void CustomSAMImplementationWrapped()
-        {
-            ArrayParamsSimple aps = new ArrayParamsSimple("default", "default");
-            FinancialParamsSimple fps = new FinancialParamsSimple(25, 7.5f, 100);
-            GISData gis = new GISData();
-
-            InputParams ip = new InputParams(gis, aps, fps);
-
-            ModelPVSystem mp = new ModelPVSystem(ip);
-
-            Console.WriteLine("Year One Power Produced: "+mp.getYearOneOutput());
-            Console.WriteLine("Value of energy in Year 1: $" + mp.getAnnualValueOfEnergyProduced()[0]);
-            Console.WriteLine("Net Present Value: $" + mp.getNetPresentValue());
-        }
-
-        static void CustomSAMImplementation()
-        {
-            
-            // SAM
-            GISData gis = new GISData();
-            ArrayParamsUser array = new ArrayParamsUser();
-            SystemModelOutput smo = pvsam1.run(gis,array);
-            SizeAndCostParams sc = new SizeAndCostParams(smo);
-            
-            AnnualOutputOutput aooData = annualoutput.run(new AnnualOutputParams(smo));
-            
-            UtilityRateParams up = new UtilityRateParams(smo);
-            UtilityRateOutput uro = utilityrate.run(up);
-            CashLoanParams clp = new CashLoanParams(uro, sc);
-            CashLoanOutput LoanOutput = cashloan.run(clp);
-
-            Console.WriteLine();
-            Console.WriteLine("Total System Cost: $"+sc.total_costs);
-            Console.WriteLine("System DC Rating: " + sc.dc_rating + " W");
-            Console.WriteLine("Net Present Value: $" + LoanOutput.npv);
-
-
-            
-            
-            
-            /** Comparison with SAM
-            Console.WriteLine(sc.total_costs);
-
-            float[] ac_hourly = smo.ac_hourly;
-            float[] ac_monthly = smo.ac_monthly;
-            float ac_annual = smo.ac_annual;
-            for (int i = 0; i < ac_monthly.Length; i++)
-            {
-                Console.WriteLine("ac_monthly[" + i + "] (kWh) = " + ac_monthly[i] + "\n");
-            }
-            Console.WriteLine("ac_annual (kWh) = " + ac_annual + "\n");
-
-
-            //annual output
-            
-
-            float[] net_hourly = aooData.net_hourly;
-            float[] net_annual = aooData.net_annual;
-            
-            for (int i = 0; i < net_annual.Length; i++)
-            {
-                Console.WriteLine(net_annual[i]);
-            }
-
-            //utility rate
-            
-
-            float[] energy_net = uro.energy_net;
-            for (int i = 0; i < energy_net.Length; i++)
-            {
-                Console.WriteLine("energy_net_annual (kWh) = " + energy_net[i] + "\n");
-            }
-            
-            //cashloan
-            
-
-            float lcoe_real = clo.lcoe_real;
-            float lcoe_nom = clo.lcoe_nom;
-            float npv = clo.npv;
-
-            Console.WriteLine("LCOE real (cents/kWh) = " + lcoe_real + "\n");
-            Console.WriteLine("LCOE nominal (cents/kWh) = " + lcoe_nom + "\n");
-            Console.WriteLine("NPV = $" + npv + "\n");
-             */
         }
 
         static void pvWattsTest()

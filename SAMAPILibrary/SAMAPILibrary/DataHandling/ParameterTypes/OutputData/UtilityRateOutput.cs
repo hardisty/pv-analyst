@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SAMAPILibrary.SAMAPI;
-using SAMAPILibrary.CalculationWrappers.Executables;
-using SAMAPILibrary.FinancialModels;
 
 namespace SAMAPILibrary.DataObjects.OutputData
 {
 
-    public class UtilityRateOutput: ICashLoanInputs
+    public class UtilityRateOutput
     {
         private Data data;
 

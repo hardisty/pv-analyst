@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using SAMAPILibrary.DataObjects.OutputData;
 using SAMAPILibrary.SAMAPI;
-using SAMAPILibrary.DataObjects.FinancialModels;
 
 namespace SAMAPILibrary.DataHandling.ParameterTypes
 {

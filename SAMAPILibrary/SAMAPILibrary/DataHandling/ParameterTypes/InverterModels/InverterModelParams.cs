@@ -6,7 +6,7 @@ using SAMAPILibrary.SAMAPI;
 
 namespace SAMAPILibrary.DataObjects.InverterModels
 {
-    public abstract class InverterModelParams: IDataParamSetter
+    public abstract class InverterModelParams
     {
         /// <summary>
         /// Use the database to get the parameters for the inverter performance model

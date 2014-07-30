@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using SAMAPILibrary.DataHandling.ParameterTypes.OutputData;
 using SAMAPILibrary.DataObjects.OutputData;
-using SAMAPILibrary.DataObjects.FinancialModels;
 using SAMAPILibrary.DataHandling;
 using SAMAPILibrary.DataObjects;
 
@@ -12,10 +11,10 @@ namespace SAMAPILibrary.CalculationWrappers
 {
     class PVSystemModel
     {
-        InputParams IP;
+        //InputParams IP;
 
         SystemModelOutput SystemOutput;
-        SizeAndCostParams CostOutput;
+        //SizeAndCostParams CostOutput;
         UtilityRateOutput UtilityOutput;
         CashLoanOutput LoanOutput;
 

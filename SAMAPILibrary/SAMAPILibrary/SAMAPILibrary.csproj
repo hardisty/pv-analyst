@@ -40,10 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CalculationWrappers\Executables\annualoutput.cs" />
-    <Compile Include="CalculationWrappers\Executables\cashloan.cs" />
-    <Compile Include="CalculationWrappers\InputParams.cs" />
-    <Compile Include="CalculationWrappers\ModelPVSystem.cs" />
     <Compile Include="CalculationWrappers\PVSystemModel.cs" />
     <Compile Include="DataHandling\ParameterTypes\ArrayParameterList.cs" />
     <Compile Include="DataHandling\ParameterTypes\ArrayParametersComputedList.cs" />
@@ -62,22 +58,7 @@
     <Compile Include="DataHandling\ParameterTypes\StringParameter.cs" />
     <Compile Include="DataHandling\ParameterTypes\UtilityRateParameterList.cs" />
     <Compile Include="DataHandling\ParameterTypes\SizeAndCostParameterList.cs" />
-    <Compile Include="DataObjects\ArrayParamsSimple.cs" />
-    <Compile Include="DataObjects\FinancialModels\FinancialParamsSimple.cs" />
-    <Compile Include="DataObjects\FinancialModels\SizeAndCostParams.cs" />
-    <Compile Include="DataObjects\FinancialModels\IAnnualOutputInputs.cs" />
-    <Compile Include="DataObjects\FinancialModels\ICashLoanInputs.cs" />
-    <Compile Include="DataObjects\FinancialModels\IUtilityRateInputs.cs" />
-    <Compile Include="CalculationWrappers\Executables\pvsam1.cs" />
-    <Compile Include="CalculationWrappers\Executables\utilityrate.cs" />
-    <Compile Include="DataObjects\ArrayParamsUser.cs" />
-    <Compile Include="DataObjects\ArrayParams.cs" />
-    <Compile Include="DataObjects\FinancialModels\CashLoanParams.cs" />
-    <Compile Include="DataObjects\FinancialModels\AnnualOutputParams.cs" />
-    <Compile Include="DataObjects\FinancialModels\UtilityRateParams.cs" />
-    <Compile Include="DataObjects\GISData.cs" />
-    <Compile Include="DataObjects\ArrayParamsComputed.cs" />
-    <Compile Include="DataObjects\IDataParamSetter.cs" />
+    <Compile Include="DataHandling\ParameterTypes\GISData.cs" />
     <Compile Include="DataHandling\ParameterTypes\InverterModels\InverterModelParams.cs" />
     <Compile Include="DataHandling\ParameterTypes\InverterModels\SNLInverterModel.cs" />
     <Compile Include="DataHandling\ParameterTypes\ModuleModels\CECModuleModel.cs" />

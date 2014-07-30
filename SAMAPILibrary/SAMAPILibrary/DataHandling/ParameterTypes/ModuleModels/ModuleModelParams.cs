@@ -6,7 +6,7 @@ using SAMAPILibrary.SAMAPI;
 
 namespace SAMAPILibrary.DataObjects.ModuleModels
 {
-    public abstract class ModuleModelParams: IDataParamSetter
+    public abstract class ModuleModelParams
     {
         public static ModuleModelParams getModuleParams(int module_model, String module_model_identifier){
             if (module_model == 1)
