@@ -9,6 +9,7 @@ using SAMAPILibrary.DataObjects.FinancialModels;
 using SAMAPILibrary.DataObjects.OutputData;
 using SAMAPILibrary.CalculationWrappers;
 using SAMAPILibrary.DataHandling;
+using SAMAPILibrary.DataHandling.ParameterTypes;
 
 namespace SAMAPITester
 {
@@ -24,11 +25,30 @@ namespace SAMAPITester
         }
         static void SAMRewriteTest()
         {
-            List<IParameter> l = new List<IParameter>() { new FloatArrayParameter("subarray1_soiling", new float[] { 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f }) };
-            ArrayParameterList apl = new ArrayParameterList(l);
             GISData gis = new GISData();
-            SystemModelOutput smo = pvsamrw.run(gis,apl);
+
+            ArrayParameterListBuilder ab = new ArrayParameterListBuilder();
+            UtilityRateParameterBuilder ub = new UtilityRateParameterBuilder();
+            CashLoanParameterBuilder cb = new CashLoanParameterBuilder();
+            SizeAndCostParameterBuilder sc = new SizeAndCostParameterBuilder();
+
+            float[] soiling = new float[] { 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f };
+            ab.subarray1_soiling(soiling);
+
+
+            ab.initialize(gis);
+            SystemModelOutput smo = ab.build().runModule();
+
+            ub.initialize(smo);
+            UtilityRateOutput uro = ub.build().runModule();
+
+            sc.initialize(smo);
+            cb.initialize(sc.build(), uro);
+            CashLoanOutput clo = cb.build().runModule();
+
             Console.WriteLine("Year One Power Produced: " + smo.ac_annual);
+            Console.WriteLine("Value of energy in Year 1: $" + uro.getAnnualValueOfNetEnergy()[0]);
+            Console.WriteLine("Net Present Value: $" + clo.npv);
         }
 
         static void CustomSAMImplementationWrapped()
@@ -42,6 +62,7 @@ namespace SAMAPITester
             ModelPVSystem mp = new ModelPVSystem(ip);
 
             Console.WriteLine("Year One Power Produced: "+mp.getYearOneOutput());
+            Console.WriteLine("Value of energy in Year 1: $" + mp.getAnnualValueOfEnergyProduced()[0]);
             Console.WriteLine("Net Present Value: $" + mp.getNetPresentValue());
         }
 

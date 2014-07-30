@@ -6,9 +6,9 @@ using SAMAPILibrary.SAMAPI;
 
 namespace SAMAPILibrary.DataHandling
 {
-    class FloatParameter : Parameter<float>, IParameter
+    public class FloatParameter : Parameter<float>, IParameter
     {
-        FloatParameter(string name, float value):base(name, value){}
+        public FloatParameter(string name, float value):base(name, value){}
         
         public override void setValue(Data data)
         {
