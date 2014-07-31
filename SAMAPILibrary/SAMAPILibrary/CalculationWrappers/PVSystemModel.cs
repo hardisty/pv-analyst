@@ -6,27 +6,48 @@ using SAMAPILibrary.DataHandling.ParameterTypes.OutputData;
 using SAMAPILibrary.DataObjects.OutputData;
 using SAMAPILibrary.DataHandling;
 using SAMAPILibrary.DataObjects;
+using SAMAPILibrary.DataHandling.ParameterTypes;
 
 namespace SAMAPILibrary.CalculationWrappers
 {
-    class PVSystemModel
+    public class PVSystemModel
     {
         //InputParams IP;
 
+        GISData gisData;
+        ArrayParameterListBuilder arrayBuilder;
+        UtilityRateParameterBuilder utilityBuilder;
+        CashLoanParameterBuilder cashBuilder;
+        SizeAndCostParameterBuilder sizeBuilder;
+
         SystemModelOutput SystemOutput;
-        //SizeAndCostParams CostOutput;
+        SizeAndCostParameterList CostOutput;
         UtilityRateOutput UtilityOutput;
         CashLoanOutput LoanOutput;
 
-        public PVSystemModel(GISData gis)
+        public PVSystemModel(GISData gis,ArrayParameterListBuilder apl,UtilityRateParameterBuilder upl, CashLoanParameterBuilder clp, SizeAndCostParameterBuilder scb)
         {
-            
+            gisData = gis;
+            arrayBuilder = apl;
+            utilityBuilder = upl;
+            cashBuilder = clp;
+            sizeBuilder = scb;
             
         }
 
-        private void run()
+        public void run()
         {
+            arrayBuilder.initialize(gisData);
+            SystemOutput = arrayBuilder.build().runModule();
+
+            utilityBuilder.initialize(SystemOutput);
+            UtilityOutput = utilityBuilder.build().runModule();
+
+            sizeBuilder.initialize(SystemOutput);
+            CostOutput = sizeBuilder.build();
             
+            cashBuilder.initialize(CostOutput, UtilityOutput);
+            LoanOutput = cashBuilder.build().runModule();
         }
 
         //TODO add more outputs or decide how they should look

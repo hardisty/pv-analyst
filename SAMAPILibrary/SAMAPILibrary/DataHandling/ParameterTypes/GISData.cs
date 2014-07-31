@@ -47,4 +47,17 @@ namespace SAMAPILibrary.DataObjects
             height = 9.1f;
         }
     }
+
+    public class GISDataBuilder
+    {
+        public GISDataBuilder()
+        {
+        }
+
+        public GISData build()
+        {
+            GISData d = new GISData();
+            return d;
+        }
+    }
 }

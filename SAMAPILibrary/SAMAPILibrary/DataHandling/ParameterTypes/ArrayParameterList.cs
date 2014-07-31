@@ -13,18 +13,18 @@ namespace SAMAPILibrary.DataHandling
     public class ArrayParameterList:ParameterList
     {
         new static Dictionary<string, IDefaultParameter> defaults = new Dictionary<string, IDefaultParameter>() { 
-            {"use_wf_albedo", new DefaultFloatParameter("use_wf_albedo","The AC Derate",1)},    
-            {"albedo", new DefaultFloatArrayParameter("albedo","The monthly albedo",new float[] { 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f })},
-            {"irrad_mode", new DefaultFloatParameter("irrad_mode","The Irradiance Model Mode",0)},
-            {"sky_model", new DefaultFloatParameter("sky_model","The Irradiance Sky Model",2)},
-            {"ac_derate", new DefaultFloatParameter("ac_derate","The AC Derate",0.99f)},
-            {"subarray1_soiling", new DefaultFloatArrayParameter("subarray1_soiling","The monthly soiling",new float[] { 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f })},
-            {"subarray1_derate", new DefaultFloatParameter("subarray1_derate","The array rerate",0.955598f)},       
-            {"self_shading_enabled", new DefaultFloatParameter("self_shading_enabled","Use Self Shading",0)},
+            {"use_wf_albedo", new DefaultFloatParameter("use_wf_albedo","Should the weather file albedo be used? 0/1",0)},    
+            {"albedo", new DefaultFloatArrayParameter("albedo","The monthly albedo (length 12)",new float[] { 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f })},
+            {"irrad_mode", new DefaultFloatParameter("irrad_mode","The Irradiance Model Mode (0 - b&d, 1 - g&d)",0)},
+            {"sky_model", new DefaultFloatParameter("sky_model","The Irradiance Sky Model (0 - Isotropic, 1 - HDKR, 2 - Perez)",2)},
+            {"ac_derate", new DefaultFloatParameter("ac_derate","The AC Derate (0-1)",0.99f)},
+            {"subarray1_soiling", new DefaultFloatArrayParameter("subarray1_soiling","The monthly soiling on the array (0-1)",new float[] { 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f })},
+            {"subarray1_derate", new DefaultFloatParameter("subarray1_derate","The array derate (0-1)",0.955598f)},       
+            {"self_shading_enabled", new DefaultFloatParameter("self_shading_enabled","Use Self Shading? 0/1",0)},
             {"subarray2_tilt", new DefaultFloatParameter("subarray2_tilt","Req'd but Unused",0)},
             {"subarray3_tilt", new DefaultFloatParameter("subarray3_tilt","Req'd but Unused",0)},
             {"subarray4_tilt", new DefaultFloatParameter("subarray4_tilt","Req'd but Unused",0)},
-            {"subarray1_track_mode", new DefaultFloatParameter("subarray1_track_mode","The tracking mode",0)}
+            {"subarray1_track_mode", new DefaultFloatParameter("subarray1_track_mode","The array tracking mode (0 - none, 1 - one axis, 2 - two axis, 3 - azi)",0)}
         };
 
         public readonly InverterModelParams inverter_model_params;

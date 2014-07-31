@@ -30,22 +30,14 @@ namespace SAMAPITester
             SizeAndCostParameterBuilder sc = new SizeAndCostParameterBuilder();
 
             float[] soiling = new float[] { 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f };
-            ab.subarray1_soiling(soiling);
+            //ab.subarray1_soiling(soiling);
 
+            PVSystemModel pv = new PVSystemModel(gis, ab, ub, cb, sc);
+            pv.run();
 
-            ab.initialize(gis);
-            SystemModelOutput smo = ab.build().runModule();
-
-            ub.initialize(smo);
-            UtilityRateOutput uro = ub.build().runModule();
-
-            sc.initialize(smo);
-            cb.initialize(sc.build(), uro);
-            CashLoanOutput clo = cb.build().runModule();
-
-            Console.WriteLine("Year One Power Produced: " + smo.ac_annual);
-            Console.WriteLine("Value of energy in Year 1: $" + uro.getAnnualValueOfNetEnergy()[0]);
-            Console.WriteLine("Net Present Value: $" + clo.npv);
+            Console.WriteLine("Year One Power Produced: " + pv.getYearOneOutput());
+            Console.WriteLine("Value of energy in Year 1: $" + pv.getAnnualValueOfEnergyProduced()[0]);
+            Console.WriteLine("Net Present Value: $" + pv.getNetPresentValue());
         }
 
         static void pvWattsTest()
