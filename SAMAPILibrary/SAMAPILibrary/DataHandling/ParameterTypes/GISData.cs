@@ -35,28 +35,86 @@ namespace SAMAPILibrary.DataObjects
         /// </summary>
         public readonly float height; //in meters
 
-        public GISData()
+        public GISData(GISDataBuilder b)
         {
-            //defaults
-            tilt = 20;
-            azimuth = 180;
-            latitude = 33;
-            longitude = -112;
-
-            width = 2.5f;
-            height = 9.1f;
+            tilt = b.mtilt;
+            azimuth = b.mazimuth;
+            latitude = b.mlatitude;
+            longitude = b.mlongitude;
+            width = b.mwidth;
+            height = b.mheight;
         }
     }
 
+    /// <summary>
+    /// Builder for creating a GISData object containing the data needed to represent the building's
+    /// rooftop for a potential solar install site.
+    /// </summary>
     public class GISDataBuilder
     {
+        public float mtilt = 20;
+        public float mazimuth = 180;
+        public float mlatitude = 33; 
+        public float mlongitude = -112;
+        public float mwidth = 2.5f; 
+        public float mheight = 9.1f; 
+
         public GISDataBuilder()
         {
         }
 
+        /// <summary>
+        /// The tilt/pitch of the rooftop, in degrees
+        /// </summary>
+        /// <param name="value"></param>
+        public void tilt(float value)
+        {
+            mtilt = value;
+        }
+        /// <summary>
+        /// The azimuth/aspect of the rooftop, in degrees
+        /// </summary>
+        /// <param name="value"></param>
+        public void azimuth(float value)
+        {
+            mazimuth = value;
+        }
+        /// <summary>
+        /// The location's latitude, in degrees (+N/-S)
+        /// </summary>
+        /// <param name="value"></param>
+        public void latitude(float value)
+        {
+            mlatitude = value;
+        }
+        /// <summary>
+        /// The location's longitude, in degrees (+E/-W)
+        /// </summary>
+        /// <param name="value"></param>
+        public void longitude(float value)
+        {
+            mlongitude = value;
+        }
+        /// <summary>
+        /// The rooftop width, in meters
+        /// </summary>
+        /// <param name="value"></param>
+        public void width(float value)
+        {
+            mwidth = value;
+        }
+        /// <summary>
+        /// The rooftop height, in meters
+        /// </summary>
+        /// <param name="value"></param>
+        public void height(float value)
+        {
+            mheight = value;
+        }
+
         public GISData build()
         {
-            GISData d = new GISData();
+            GISData d = new GISData(this);
             return d;
         }
     }

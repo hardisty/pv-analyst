@@ -22,7 +22,7 @@ namespace SAMAPITester
         }
         static void SAMRewriteTest()
         {
-            GISData gis = new GISData();
+            GISData gis = new GISDataBuilder().build();
 
             ArrayParameterListBuilder ab = new ArrayParameterListBuilder();
             UtilityRateParameterBuilder ub = new UtilityRateParameterBuilder();
