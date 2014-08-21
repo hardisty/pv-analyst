@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="CalculationWrappers\GUITranslator.cs" />
     <Compile Include="CalculationWrappers\PVSystemModel.cs" />
+    <Compile Include="DataHandling\Input\GISInput.cs" />
     <Compile Include="DataHandling\Parameters\ArrayParameterList.cs" />
     <Compile Include="DataHandling\Parameters\ArrayParametersComputedList.cs" />
     <Compile Include="DataHandling\Parameters\CashLoanParameterList.cs" />
