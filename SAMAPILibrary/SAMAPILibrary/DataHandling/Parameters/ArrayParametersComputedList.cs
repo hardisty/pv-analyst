@@ -10,8 +10,7 @@ namespace SAMAPILibrary.DataHandling.Parameters
     class ArrayParametersComputedList:ParameterList
     {
 
-        new static Dictionary<string, IDefaultParameter> defaults = new Dictionary<string, IDefaultParameter>() { 
-            {"weather_file", new DefaultStringParameter("weather_file","The weather file to use","ExampleFiles\\PA Philadelphia.tm2")},    
+        new static Dictionary<string, IDefaultParameter> defaults = new Dictionary<string, IDefaultParameter>() {    
             {"modules_per_string", new DefaultFloatParameter("modules_per_string","# of modules per string",9)},
             {"strings_in_parallel", new DefaultFloatParameter("strings_in_parallel","# of strings in array",2)},
             {"subarray1_tilt", new DefaultFloatParameter("subarray1_tilt","The tilt of the array",0f)},
@@ -33,15 +32,12 @@ namespace SAMAPILibrary.DataHandling.Parameters
             
             int[] shape = calcArrayWiring(numModules, array.inverter_model_params.getMaxRatedVoltage(), array.module_model_params.getVmax());
             
-
-            // TODO - Find closest TMY2 file
-            Dictionary<string, IDefaultParameter> update = new Dictionary<string, IDefaultParameter>() { 
-                {"weather_file", new DefaultStringParameter("weather_file","The weather file to use","ExampleFiles\\PA Philadelphia.tm2")},    
-                {"modules_per_string", new DefaultFloatParameter("modules_per_string","# of modules per string",shape[0])},
-                {"strings_in_parallel", new DefaultFloatParameter("strings_in_parallel","# of strings in array",shape[1])},
-                {"subarray1_tilt", new DefaultFloatParameter("subarray1_tilt","The tilt of the array",gis.tilt)},
-                {"subarray1_azimuth", new DefaultFloatParameter("subarray1_azimuth","The azimuth of the array",gis.azimuth)},
-                {"inverter_count", new DefaultFloatParameter("inverter_count","The number of inverters", 1)}
+            Dictionary<string, IParameter> update = new Dictionary<string, IParameter>() { 
+                {"modules_per_string", new FloatParameter("modules_per_string",shape[0])},
+                {"strings_in_parallel", new FloatParameter("strings_in_parallel",shape[1])},
+                {"subarray1_tilt", new FloatParameter("subarray1_tilt",gis.tilt)},
+                {"subarray1_azimuth", new FloatParameter("subarray1_azimuth",gis.azimuth)},
+                {"inverter_count", new FloatParameter("inverter_count", 1)}
             };
             parameters.Clear();
             foreach (string key in update.Keys)

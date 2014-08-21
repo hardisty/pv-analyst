@@ -65,6 +65,42 @@
     <None Include="ExampleFiles\PA Philadelphia.tm2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="ExampleFiles\Prospector\radwx_075153995_1998~.tm2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ExampleFiles\Prospector\radwx_075153995_1999~.tm2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ExampleFiles\Prospector\radwx_075153995_2000~.tm2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ExampleFiles\Prospector\radwx_075153995_2001~.tm2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ExampleFiles\Prospector\radwx_075153995_2002~.tm2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ExampleFiles\Prospector\radwx_075153995_2003~.tm2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ExampleFiles\Prospector\radwx_075153995_2004~.tm2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ExampleFiles\Prospector\radwx_075153995_2005~.tm2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ExampleFiles\Prospector\radwx_075153995_2006~.tm2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ExampleFiles\Prospector\radwx_075153995_2007~.tm2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ExampleFiles\Prospector\radwx_075153995_2008~.tm2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ExampleFiles\Prospector\radwx_075153995_2009~.tm2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="ExampleFiles\rocksprings.tm2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

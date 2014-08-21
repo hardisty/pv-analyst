@@ -14,6 +14,7 @@ namespace SAMAPILibrary.DataHandling.Parameters
     {
         new static Dictionary<string, IDefaultParameter> defaults = new Dictionary<string, IDefaultParameter>() { 
             {"use_wf_albedo", new DefaultFloatParameter("use_wf_albedo","Should the weather file albedo be used? 0/1",0)},    
+            {"weather_file", new DefaultStringParameter("weather_file","The weather file to use","ExampleFiles\\PA Philadelphia.tm2")}, 
             {"albedo", new DefaultFloatArrayParameter("albedo","The monthly albedo (length 12)",new float[] { 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f })},
             {"irrad_mode", new DefaultFloatParameter("irrad_mode","The Irradiance Model Mode (0 - b&d, 1 - g&d)",0)},
             {"sky_model", new DefaultFloatParameter("sky_model","The Irradiance Sky Model (0 - Isotropic, 1 - HDKR, 2 - Perez)",2)},
@@ -157,6 +158,15 @@ namespace SAMAPILibrary.DataHandling.Parameters
         public void subarray1_derate(float derate)
         {
             list.Add(new FloatParameter("subarray1_derate", derate));
+        }
+
+        /// <summary>
+        /// The filename for the weather file
+        /// </summary>
+        /// <param name="name">relative path to file</param>
+        public void weather_file(string name)
+        {
+            list.Add(new StringParameter("weather_file", name));
         }
 
         public ArrayParameterList build()
