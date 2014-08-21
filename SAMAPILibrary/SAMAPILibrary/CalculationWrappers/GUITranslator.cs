@@ -3,18 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SAMAPILibrary.DataHandling.Parameters;
+using System.IO;
 
 namespace SAMAPILibrary.CalculationWrappers
 {
     public class GUITranslator
     {
 
+        public static MultiplePVSystemModel multiRunModel(GISData gis, GUIData gui, int[] years)
+        {
+            MultiplePVSystemModel pv = new MultiplePVSystemModel();
+            for (int i = 0; i < years.Length; i++)
+            {
+                String fn = "ExampleFiles\\Prospector\\radwx_075153995_" + years[i] + "~.tm2";
+                pv.Add(runModel(gis, gui, fn));
+            }
+
+            return pv;
+        }
+
         public static PVSystemModel runModel(GISData gis, GUIData gui)
         {
+            return runModel(gis, gui, null);
+        }
+
+        public static PVSystemModel runModel(GISData gis, GUIData gui,string filename)
+        {
+            
+
             ArrayParameterListBuilder ab = new ArrayParameterListBuilder();
             UtilityRateParameterBuilder ub = new UtilityRateParameterBuilder();
             CashLoanParameterBuilder cb = new CashLoanParameterBuilder();
             SizeAndCostParameterBuilder sc = new SizeAndCostParameterBuilder();
+
+            if (filename != null)
+            {
+                ab.weather_file(filename);
+            }
 
             sc.overall_cost_per_watt_dc(gui.cost_per_watt_dc);
 
@@ -47,5 +72,7 @@ namespace SAMAPILibrary.CalculationWrappers
 
             return pv;
         }
+
+        
     }
 }

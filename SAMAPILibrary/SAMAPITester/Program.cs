@@ -8,6 +8,7 @@ using SAMAPILibrary.DataHandling.OutputData;
 using SAMAPILibrary.CalculationWrappers;
 using SAMAPILibrary.DataHandling.Parameters;
 using System.Diagnostics;
+using System.IO;
 
 namespace SAMAPITester
 {
@@ -51,15 +52,13 @@ namespace SAMAPITester
                 .enable_incentives(true)
                 .build();
 
-            
 
-            //===Run the model===
+            //===Run the model for one year===
             Stopwatch s = new Stopwatch(); s.Start();
-            PVSystemModel pv = GUITranslator.runModel(gis,gui); // This is the model run command
-            s.Stop(); Console.WriteLine("\nRuntime: "+s.ElapsedMilliseconds + "ms \n\n");
+            PVSystemModel pv = GUITranslator.runModel(gis, gui); // This is the model run command
+            s.Stop(); Console.WriteLine("\nRuntime: " + s.ElapsedMilliseconds + "ms \n\n");
 
-
-            //===Example Uses of the Output===
+            //===Example Uses of the Output For Single Year===
             Console.WriteLine("Nameplate Capacity: " + pv.getNameplateCapacity() + " kWDC");
             Console.WriteLine("Inverter Capacity: " + pv.getInverterACCapacity() + " WAC");
             Console.WriteLine("Total System Cost: $" + pv.getSystemCost());
@@ -75,6 +74,24 @@ namespace SAMAPITester
             {
                 //Console.WriteLine(yrbyyrvalue[i]);
             }
+
+
+            //===Run the model for multiple years===
+            Stopwatch s2 = new Stopwatch(); s.Start();
+            int[] years = new int[] { 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 };
+            MultiplePVSystemModel pv2 = GUITranslator.multiRunModel(gis, gui, years); // This is the model run command
+            s2.Stop(); Console.WriteLine("\nRuntime: " + s.ElapsedMilliseconds + "ms \n\n");
+
+            //===Example Uses of the Output for Multiple Year===
+            float[] multival = pv2.getYearOneOutput();
+            for (int i = 0; i < multival.Length; i++)
+            {
+                Console.WriteLine(multival[i]);
+            }
+            double average = multival.Average();
+            double sumOfSquaresOfDifferences = multival.Select(val => (val - average) * (val - average)).Sum();
+            double sd = Math.Sqrt(sumOfSquaresOfDifferences / multival.Length); 
+            Console.WriteLine("Average: "+average+",  STD: " + sd);
 
         }
 
