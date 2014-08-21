@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using SAMAPILibrary.SAMAPI;
 
-namespace SAMAPILibrary.DataObjects.ModuleModels
+namespace SAMAPILibrary.DataHandling.ModuleModels
 {
     public abstract class ModuleModelParams
     {

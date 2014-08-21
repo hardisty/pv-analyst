@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SAMAPILibrary.DataHandling.ParameterTypes.OutputData;
-using SAMAPILibrary.DataObjects.OutputData;
-using SAMAPILibrary.DataHandling;
-using SAMAPILibrary.DataObjects;
-using SAMAPILibrary.DataHandling.ParameterTypes;
+using SAMAPILibrary.DataHandling.OutputData;
+using SAMAPILibrary.DataHandling.Parameters;
 
 namespace SAMAPILibrary.CalculationWrappers
 {
@@ -60,10 +57,47 @@ namespace SAMAPILibrary.CalculationWrappers
         {
             return SystemOutput.ac_annual;
         }
-
+        public float[] getAnnualNetEnergy()
+        {
+            return UtilityOutput.energy_net;
+        }
         public float[] getAnnualValueOfEnergyProduced()
         {
             return UtilityOutput.getAnnualValueOfNetEnergy();
+        }
+        public float[] getElecCostWithoutSystem()
+        {
+            return UtilityOutput.getElectricityCostWithoutSystem();
+        }
+        public float[] getElecCostWithSystem()
+        {
+            return UtilityOutput.getElectricityCostWithSystem();
+        }
+        public float getNameplateCapacity()
+        {
+            return SystemOutput.sys_dc_rating;
+        }
+        public float getInverterACCapacity()
+        {
+            return SystemOutput.inv_ac_rating;
+        }
+        public float getSystemCost()
+        {
+            return CostOutput.total_costs;
+        }
+
+        public float getCostPerWatt()
+        {
+            return CostOutput.cost_per_watt_dc;
+        }
+
+        public float[] getOperatingExpense()
+        {
+            return LoanOutput.cf_operating_expenses;
+        }
+        public float[] getTotalDebtPayment()
+        {
+            return LoanOutput.cf_debt_payment_total;
         }
     }
     

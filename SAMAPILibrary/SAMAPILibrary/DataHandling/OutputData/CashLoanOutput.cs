@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using SAMAPILibrary.SAMAPI;
 
-namespace SAMAPILibrary.DataObjects.OutputData
+namespace SAMAPILibrary.DataHandling.OutputData
 {
     public class CashLoanOutput
     {
@@ -29,6 +29,21 @@ namespace SAMAPILibrary.DataObjects.OutputData
                 return data.GetNumber("npv"); 
             } 
         }
+        public float[] cf_operating_expenses
+        {
+            get
+            {
+                return data.GetArray("cf_operating_expenses");
+            }
+        }
+        public float[] cf_debt_payment_total
+        {
+            get
+            {
+                return data.GetArray("cf_debt_payment_total");
+            }
+        }
+
         public CashLoanOutput(Data data)
         {
             this.data = data;

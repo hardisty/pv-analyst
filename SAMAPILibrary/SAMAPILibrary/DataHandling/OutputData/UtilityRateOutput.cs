@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using SAMAPILibrary.SAMAPI;
 
-namespace SAMAPILibrary.DataObjects.OutputData
+namespace SAMAPILibrary.DataHandling.OutputData
 {
 
     public class UtilityRateOutput
@@ -31,6 +31,21 @@ namespace SAMAPILibrary.DataObjects.OutputData
             }
         }
 
+        public float[] elec_cost_without_system
+        {
+            get
+            {
+                return data.GetArray("elec_cost_without_system");
+            }
+        }
+        public float[] elec_cost_with_system
+        {
+            get
+            {
+                return data.GetArray("elec_cost_with_system");
+            }
+        }
+
         public UtilityRateOutput(Data data)
         {
             this.data = data;
@@ -51,5 +66,13 @@ namespace SAMAPILibrary.DataObjects.OutputData
             return energy_net;
         }
 
+        public float[] getElectricityCostWithoutSystem()
+        {
+            return elec_cost_without_system;
+        }
+        public float[] getElectricityCostWithSystem()
+        {
+            return elec_cost_with_system;
+        }
     }
 }

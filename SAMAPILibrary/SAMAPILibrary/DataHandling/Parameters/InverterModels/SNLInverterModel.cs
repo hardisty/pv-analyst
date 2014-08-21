@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SAMAPILibrary.DataObjects.InverterModels
+namespace SAMAPILibrary.DataHandling.InverterModels
 {
     /// <summary>
     /// Holder for Sandia National Labs inverter model parameters

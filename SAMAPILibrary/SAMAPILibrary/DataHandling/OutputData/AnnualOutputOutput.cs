@@ -4,18 +4,24 @@ using System.Linq;
 using System.Text;
 using SAMAPILibrary.SAMAPI;
 
-namespace SAMAPILibrary.DataObjects.OutputData
+namespace SAMAPILibrary.DataHandling.OutputData
 {
     public class AnnualOutputOutput
     {
         private readonly Data data;
 
+        /// <summary>
+        /// Number of years for which the analysis was performed
+        /// </summary>
         public int analysis_years { 
             get { 
                 return (int) data.GetNumber("analysis_years"); 
             } 
         }
       
+        /// <summary>
+        /// Hourly net energy delivered to the grid for year 1, in Watts
+        /// </summary>
         public float[] net_hourly
         {
             get
@@ -24,6 +30,9 @@ namespace SAMAPILibrary.DataObjects.OutputData
             }
         }
 
+        /// <summary>
+        /// Year-by-year energy delivered to the grid, in Watts
+        /// </summary>
         public float[] net_annual
         {
             get
@@ -32,6 +41,9 @@ namespace SAMAPILibrary.DataObjects.OutputData
             }
         }
 
+        /// <summary>
+        /// Energy degredation for each year, as percent
+        /// </summary>
         public float[] energy_degradation
         {
             get
@@ -40,6 +52,9 @@ namespace SAMAPILibrary.DataObjects.OutputData
             }
         }
 
+        /// <summary>
+        /// Energy availability for each year, as percent
+        /// </summary>
         public float[] energy_availability
         {
             get

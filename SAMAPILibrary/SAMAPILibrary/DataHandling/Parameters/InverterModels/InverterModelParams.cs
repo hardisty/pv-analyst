@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using SAMAPILibrary.SAMAPI;
 
-namespace SAMAPILibrary.DataObjects.InverterModels
+namespace SAMAPILibrary.DataHandling.InverterModels
 {
     public abstract class InverterModelParams
     {
@@ -19,11 +19,27 @@ namespace SAMAPILibrary.DataObjects.InverterModels
             {
                 return new SNLInverterModel(inverter_model_identifier);
             }
+            else if (inverter_model == 1)
+            {
+                return new DatasheetInverterModel(inverter_model_identifier,4000); // Use the default
+            }
             else
             {
                 //TODO implement other Inverter Models
                 throw new NotImplementedException("Must be 0,1 or 2");
             }
+        }
+
+        /// <summary>
+        /// Get a set of "made up" inverer parameters using the datasheet model
+        /// </summary>
+        /// <param name="inverter_model">ignored</param>
+        /// <param name="inverter_model_identifier"></param>
+        /// <param name="size">The rated AC size in Watts</param>
+        /// <returns></returns>
+        public static InverterModelParams getInverterParams(int inverter_model, String inverter_model_identifier, float size)
+        {
+            return new DatasheetInverterModel(inverter_model_identifier, size);
         }
 
         public abstract void setDataParameters(Data data);

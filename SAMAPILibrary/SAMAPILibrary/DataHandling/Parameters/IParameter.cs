@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using SAMAPILibrary.SAMAPI;
 
-namespace SAMAPILibrary.DataHandling
+namespace SAMAPILibrary.DataHandling.Parameters
 {
     public interface IParameter
     {

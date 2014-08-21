@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SAMAPILibrary.SAMAPI;
-using SAMAPILibrary.DataObjects;
-using SAMAPILibrary.DataObjects.OutputData;
-using SAMAPILibrary.CalculationWrappers;
 using SAMAPILibrary.DataHandling;
-using SAMAPILibrary.DataHandling.ParameterTypes;
+using SAMAPILibrary.DataHandling.OutputData;
+using SAMAPILibrary.CalculationWrappers;
+using SAMAPILibrary.DataHandling.Parameters;
+using System.Diagnostics;
 
 namespace SAMAPITester
 {
@@ -20,24 +20,62 @@ namespace SAMAPITester
             SAMRewriteTest();
 
         }
+        /// <summary>
+        /// Demo of the SAM API implemented by J. Ranalli on 8/21/14
+        /// </summary>
         static void SAMRewriteTest()
         {
-            GISData gis = new GISDataBuilder().build();
+            //===Create the high level inputs===
+            //From GIS
+            GISData gis = new GISDataBuilder()
+                .azimuth(180)
+                .tilt(20)
+                .latitude(39.53f)
+                .longitude(-75.15f)
+                .width(1.7f)
+                .height(14.5f)
+                .build();
+            //From User Input
+            GUIData gui = new GUIDataBuilder()
+                .analysis_years(25)
+                .cost_per_watt_dc(0)
+                .discount_rate(8)
+                .inflation_rate(2.5f)
+                .loan_rate(7.5f)
+                .loan_term(25)
+                .loan_debt(100)
+                .srec_price(50f)
+                .utility_ann_escal_rate(0.5f)
+                .utility_monthly_fixed_cost(0)
+                .utility_price_to_compare(0.12f)
+                .enable_incentives(true)
+                .build();
 
-            ArrayParameterListBuilder ab = new ArrayParameterListBuilder();
-            UtilityRateParameterBuilder ub = new UtilityRateParameterBuilder();
-            CashLoanParameterBuilder cb = new CashLoanParameterBuilder();
-            SizeAndCostParameterBuilder sc = new SizeAndCostParameterBuilder();
+            
 
-            float[] soiling = new float[] { 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f, 0.9f };
-            //ab.subarray1_soiling(soiling);
+            //===Run the model===
+            Stopwatch s = new Stopwatch(); s.Start();
+            PVSystemModel pv = GUITranslator.runModel(gis,gui); // This is the model run command
+            s.Stop(); Console.WriteLine("\nRuntime: "+s.ElapsedMilliseconds + "ms \n\n");
 
-            PVSystemModel pv = new PVSystemModel(gis, ab, ub, cb, sc);
-            pv.run();
 
-            Console.WriteLine("Year One Power Produced: " + pv.getYearOneOutput());
+            //===Example Uses of the Output===
+            Console.WriteLine("Nameplate Capacity: " + pv.getNameplateCapacity() + " kWDC");
+            Console.WriteLine("Inverter Capacity: " + pv.getInverterACCapacity() + " WAC");
+            Console.WriteLine("Total System Cost: $" + pv.getSystemCost());
+            Console.WriteLine("Cost Per Watt: $" + pv.getCostPerWatt());
+
+            Console.WriteLine("Year One Power Produced: " + pv.getYearOneOutput() + " kWh");
             Console.WriteLine("Value of energy in Year 1: $" + pv.getAnnualValueOfEnergyProduced()[0]);
             Console.WriteLine("Net Present Value: $" + pv.getNetPresentValue());
+
+            Console.WriteLine("-----");
+            float[] yrbyyrvalue = pv.getAnnualValueOfEnergyProduced();
+            for (int i = 0; i < yrbyyrvalue.Length; i++)
+            {
+                //Console.WriteLine(yrbyyrvalue[i]);
+            }
+
         }
 
         static void pvWattsTest()

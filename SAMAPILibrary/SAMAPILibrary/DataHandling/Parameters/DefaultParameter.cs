@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SAMAPILibrary.DataHandling
+namespace SAMAPILibrary.DataHandling.Parameters
 {
 
     public abstract class DefaultParameter<T>: Parameter<T>, IDefaultParameter<T>, IDefaultParameter

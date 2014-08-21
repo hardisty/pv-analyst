@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using SAMAPILibrary.SAMAPI;
 
-namespace SAMAPILibrary.DataObjects.OutputData
+namespace SAMAPILibrary.DataHandling.OutputData
 {
     public class SystemModelOutput
     {

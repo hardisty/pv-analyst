@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using SAMAPILibrary.SAMAPI;
 
-namespace SAMAPILibrary.DataObjects.ModuleModels
+namespace SAMAPILibrary.DataHandling.ModuleModels
 {
     /// <summary>
     /// Holder for CEC type module model parameters
@@ -70,8 +70,10 @@ namespace SAMAPILibrary.DataObjects.ModuleModels
                 cec_heat_transfer = 0f;
                 cec_mounting_orientation = 0f;
                 cec_gap_spacing = 0.05f;
-                cec_module_width = 1f;
-                cec_module_length = 1.244f;
+                cec_module_width = 0.799f; //Read from actual Datasheet, SAM Default is 1.0
+                cec_module_length = 1.561f; //Read from actual Datasheet, SAM Default is 1.244
+                //cec_module_width = 1.0f; //Read from actual Datasheet, SAM Default is 1.0
+                //cec_module_length = 1.244f; //Read from actual Datasheet, SAM Default is 1.244
                 cec_array_rows = 1f;
                 cec_array_cols = 10f;
                 cec_backside_temp = 20f;
@@ -134,7 +136,7 @@ namespace SAMAPILibrary.DataObjects.ModuleModels
 
         public override float getRatedPower()
         {
-            throw new NotImplementedException();
+            return cec_v_mp_ref * cec_i_mp_ref;
         }
     } 
     

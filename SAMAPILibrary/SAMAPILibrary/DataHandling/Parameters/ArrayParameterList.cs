@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SAMAPILibrary.DataObjects.InverterModels;
-using SAMAPILibrary.DataObjects.ModuleModels;
+using SAMAPILibrary.DataHandling.InverterModels;
+using SAMAPILibrary.DataHandling.ModuleModels;
 using SAMAPILibrary.SAMAPI;
-using SAMAPILibrary.DataObjects;
-using SAMAPILibrary.DataObjects.OutputData;
+using SAMAPILibrary.DataHandling;
+using SAMAPILibrary.DataHandling.OutputData;
 
-namespace SAMAPILibrary.DataHandling
+namespace SAMAPILibrary.DataHandling.Parameters
 {
     public class ArrayParameterList:ParameterList
     {
@@ -27,7 +27,7 @@ namespace SAMAPILibrary.DataHandling
             {"subarray1_track_mode", new DefaultFloatParameter("subarray1_track_mode","The array tracking mode (0 - none, 1 - one axis, 2 - two axis, 3 - azi)",0)}
         };
 
-        public readonly InverterModelParams inverter_model_params;
+        public InverterModelParams inverter_model_params;
         public readonly ModuleModelParams module_model_params;
         public readonly GISData gis;
 
@@ -43,10 +43,16 @@ namespace SAMAPILibrary.DataHandling
 
             //TODO Get the appropriate ones based on the identifiers
             int module_model = 1;
-            int inverter_model = 0;
+            int inverter_model = 1;
 
-            inverter_model_params = InverterModelParams.getInverterParams(inverter_model, inverter_model_identifier);
+            //inverter_model_params = InverterModelParams.getInverterParams(inverter_model, inverter_model_identifier);
+            inverter_model_params = null;
             module_model_params = ModuleModelParams.getModuleParams(module_model, module_model_identifier);
+        }
+
+        public void setInverterModelParams(InverterModelParams imp)
+        {
+            inverter_model_params = imp;
         }
 
         public override void setValues(Data data)
@@ -61,8 +67,9 @@ namespace SAMAPILibrary.DataHandling
             Data data = new Data();
             Module module = new Module("pvsamv1");
 
-            this.setValues(data);
             new ArrayParametersComputedList(gis, this).setValues(data);
+            this.setValues(data);
+            
             
             if (module.Exec(data))
             {
@@ -116,10 +123,40 @@ namespace SAMAPILibrary.DataHandling
             this.gis = gis;
         }
 
-        //TODO add other parameters
+        /// <summary>
+        /// The monthly soiling derate factor, ranging from 0-1. Represents percent of energy available from soiling perspective.
+        /// </summary>
+        /// <param name="soiling">Array of float, must have length of 12. Defaults to 0.95 for each month.</param>
         public void subarray1_soiling(float[] soiling)
         {
             list.Add(new FloatArrayParameter("subarray1_soiling", soiling));
+        }
+
+        /// <summary>
+        /// The Irradiance Sky Model to use
+        /// </summary>
+        /// <param name="model">0 - Isotropic, 1 - HDKR, 2 - Perez. Default 2 (Perez).</param>
+        public void sky_model(int model)
+        {
+            list.Add(new FloatParameter("sky_model", model));
+        }
+
+        /// <summary>
+        /// The AC interconnection derate for the system
+        /// </summary>
+        /// <param name="derate">Listed as percent available from 0-1. Default 0.99.</param>
+        public void ac_derate(float derate)
+        {
+            list.Add(new FloatParameter("ac_derate", derate));
+        }
+
+        /// <summary>
+        /// The DC derate for the array
+        /// </summary>
+        /// <param name="derate">Listed as percent available from 0-1. Default 0.955598.</param>
+        public void subarray1_derate(float derate)
+        {
+            list.Add(new FloatParameter("subarray1_derate", derate));
         }
 
         public ArrayParameterList build()
@@ -130,7 +167,7 @@ namespace SAMAPILibrary.DataHandling
             }
             else
             {
-                throw new ArgumentNullException("GISData must be set for ArrayParameterList.Builder");
+                throw new ArgumentNullException("GISData must be set before ArrayParameterList.Builder can build");
             }
         }
     }

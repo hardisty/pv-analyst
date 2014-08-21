@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SAMAPILibrary.DataObjects;
+using SAMAPILibrary.DataHandling;
+using SAMAPILibrary.DataHandling.InverterModels;
 
-namespace SAMAPILibrary.DataHandling
+namespace SAMAPILibrary.DataHandling.Parameters
 {
     class ArrayParametersComputedList:ParameterList
     {
 
         new static Dictionary<string, IDefaultParameter> defaults = new Dictionary<string, IDefaultParameter>() { 
-            {"weather_file", new DefaultStringParameter("weather_file","The weather file to use","ExampleFiles\\AZ Phoenix.tm2")},    
+            {"weather_file", new DefaultStringParameter("weather_file","The weather file to use","ExampleFiles\\PA Philadelphia.tm2")},    
             {"modules_per_string", new DefaultFloatParameter("modules_per_string","# of modules per string",9)},
             {"strings_in_parallel", new DefaultFloatParameter("strings_in_parallel","# of strings in array",2)},
             {"subarray1_tilt", new DefaultFloatParameter("subarray1_tilt","The tilt of the array",0f)},
@@ -24,11 +25,18 @@ namespace SAMAPILibrary.DataHandling
         {
 
             int numModules = calcNumPanelsOnRoof(gis.width, gis.height, array.module_model_params.getWidth(), array.module_model_params.getHeight());
+            if (array.inverter_model_params == null)
+            {
+                InverterModelParams imp = new DatasheetInverterModel("default", numModules * array.module_model_params.getRatedPower() * 1.15f);
+                array.setInverterModelParams(imp);
+            }
+            
             int[] shape = calcArrayWiring(numModules, array.inverter_model_params.getMaxRatedVoltage(), array.module_model_params.getVmax());
             
+
             // TODO - Find closest TMY2 file
             Dictionary<string, IDefaultParameter> update = new Dictionary<string, IDefaultParameter>() { 
-                {"weather_file", new DefaultStringParameter("weather_file","The weather file to use","ExampleFiles\\AZ Phoenix.tm2")},    
+                {"weather_file", new DefaultStringParameter("weather_file","The weather file to use","ExampleFiles\\PA Philadelphia.tm2")},    
                 {"modules_per_string", new DefaultFloatParameter("modules_per_string","# of modules per string",shape[0])},
                 {"strings_in_parallel", new DefaultFloatParameter("strings_in_parallel","# of strings in array",shape[1])},
                 {"subarray1_tilt", new DefaultFloatParameter("subarray1_tilt","The tilt of the array",gis.tilt)},

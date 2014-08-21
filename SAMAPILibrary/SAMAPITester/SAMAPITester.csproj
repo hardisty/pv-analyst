@@ -62,6 +62,9 @@
     <None Include="ExampleFiles\daggett.tm2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="ExampleFiles\PA Philadelphia.tm2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="ExampleFiles\rocksprings.tm2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

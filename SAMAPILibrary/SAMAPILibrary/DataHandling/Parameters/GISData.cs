@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SAMAPILibrary.DataObjects
+namespace SAMAPILibrary.DataHandling.Parameters
 {
     /// <summary>
     /// Data about the "roof" surface that an array will be placed on
@@ -30,8 +30,7 @@ namespace SAMAPILibrary.DataObjects
         /// Width of the surface in meters
         /// </summary>
         public readonly float width; //in meters
-        /// <summary>
-        /// Height of the surface in meters
+        /// <summary>        /// Height of the surface in meters
         /// </summary>
         public readonly float height; //in meters
 
@@ -54,10 +53,13 @@ namespace SAMAPILibrary.DataObjects
     {
         public float mtilt = 20;
         public float mazimuth = 180;
-        public float mlatitude = 33; 
-        public float mlongitude = -112;
-        public float mwidth = 2.5f; 
-        public float mheight = 9.1f; 
+        public float mlatitude = 39.53f; 
+        public float mlongitude = -75.15f;
+//        public float mwidth = 2.5f; 
+//        public float mheight = 9.1f;
+        public float mwidth = 1.7f; //Matches actual panel size
+        public float mheight = 14.5f;  // Matches actual panel size
+
 
         public GISDataBuilder()
         {
@@ -66,50 +68,56 @@ namespace SAMAPILibrary.DataObjects
         /// <summary>
         /// The tilt/pitch of the rooftop, in degrees
         /// </summary>
-        /// <param name="value"></param>
-        public void tilt(float value)
+        /// <param name="value">Default 20 deg</param>
+        public GISDataBuilder tilt(float value)
         {
             mtilt = value;
+            return this;
         }
         /// <summary>
-        /// The azimuth/aspect of the rooftop, in degrees
+        /// The azimuth/aspect of the rooftop, in degrees. Referenced to due north = 0 deg.
         /// </summary>
-        /// <param name="value"></param>
-        public void azimuth(float value)
+        /// <param name="value">Default: 180 deg</param>
+        public GISDataBuilder azimuth(float value)
         {
             mazimuth = value;
+            return this;
         }
         /// <summary>
         /// The location's latitude, in degrees (+N/-S)
         /// </summary>
-        /// <param name="value"></param>
-        public void latitude(float value)
+        /// <param name="value">Default: 39.53</param>
+        public GISDataBuilder latitude(float value)
         {
             mlatitude = value;
+            return this;
         }
         /// <summary>
         /// The location's longitude, in degrees (+E/-W)
         /// </summary>
-        /// <param name="value"></param>
-        public void longitude(float value)
+        /// <param name="value">Default: -75.15</param>
+        public GISDataBuilder longitude(float value)
         {
             mlongitude = value;
+            return this;
         }
         /// <summary>
         /// The rooftop width, in meters
         /// </summary>
-        /// <param name="value"></param>
-        public void width(float value)
+        /// <param name="value">Default 1.7</param>
+        public GISDataBuilder width(float value)
         {
             mwidth = value;
+            return this;
         }
         /// <summary>
         /// The rooftop height, in meters
         /// </summary>
-        /// <param name="value"></param>
-        public void height(float value)
+        /// <param name="value">Default 14.5</param>
+        public GISDataBuilder height(float value)
         {
             mheight = value;
+            return this;
         }
 
         public GISData build()

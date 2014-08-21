@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SAMAPILibrary.DataObjects.OutputData;
+using SAMAPILibrary.DataHandling.OutputData;
 
-namespace SAMAPILibrary.DataHandling
+namespace SAMAPILibrary.DataHandling.Parameters
 {
     public class SizeAndCostParameterList:ParameterList
     {
@@ -47,6 +47,9 @@ namespace SAMAPILibrary.DataHandling
                                     0f)},
             {"dc_rating", new DefaultFloatParameter("dc_rating",
                                     "System DC rated capacity", 
+                                    0f)},
+            {"overall_cost_per_watt_dc", new DefaultFloatParameter("overall_cost_per_watt_dc",
+                                    "Total Cost per watt DC", 
                                     0f)}
         };
 
@@ -67,6 +70,13 @@ namespace SAMAPILibrary.DataHandling
                 return ((Parameter<float>)parameters["dc_rating"]).value;
             }
         }
+        public float cost_per_watt_dc
+        {
+            get
+            {
+                return total_costs / dc_rating;
+            }
+        }
 
         public SizeAndCostParameterList(IEnumerable<IParameter> input) : base(input, defaults) 
         {
@@ -84,13 +94,22 @@ namespace SAMAPILibrary.DataHandling
             float engineering_cost_per_watt_dc = ((Parameter<float>)parameters["engineering_cost_per_watt_dc"]).value;
             float grid_intercon_cost_per_watt_dc = ((Parameter<float>)parameters["grid_intercon_cost_per_watt_dc"]).value;
             float land_cost_per_watt_dc = ((Parameter<float>)parameters["land_cost_per_watt_dc"]).value;
-            
+
+            float overall_cost_per_watt_dc = ((Parameter<float>)parameters["overall_cost_per_watt_dc"]).value;
 
 
             direct_cost = dc_rating * (pv_cost_per_watt_dc + other_system_cost_per_watt_dc + installation_cost_per_watt_dc + installer_overhead_per_watt_dc)
                               + ac_rating * inv_cost_per_watt_ac;
-            float sales_tax = (direct_cost) * (1 + sales_tax_rate / 100f) * (sales_tax_cost_basis_as_pct / 100f);
+            float sales_tax = (direct_cost) * (sales_tax_rate / 100f) * (sales_tax_cost_basis_as_pct / 100f);
             indirect_cost = sales_tax + dc_rating * (permitting_env_cost_per_watt_dc + engineering_cost_per_watt_dc + grid_intercon_cost_per_watt_dc + land_cost_per_watt_dc);
+
+            float cost_per_dc = (direct_cost + indirect_cost)/dc_rating;
+
+            if (overall_cost_per_watt_dc > 0f)
+            {
+                direct_cost *= overall_cost_per_watt_dc / cost_per_dc;
+                indirect_cost *= overall_cost_per_watt_dc / cost_per_dc;
+            }
         }
 
         
@@ -117,6 +136,11 @@ namespace SAMAPILibrary.DataHandling
             initialize(smo);
         }
 
+        public void overall_cost_per_watt_dc(float cost)
+        {
+            list.Add(new FloatParameter("overall_cost_per_watt_dc", cost));
+        }
+
 
         public void initialize(SystemModelOutput smo)
         {
@@ -124,6 +148,8 @@ namespace SAMAPILibrary.DataHandling
             list.Add(new FloatParameter("dc_rating", smo.sys_dc_rating * 1000));
             list.Add(new FloatParameter("ac_rating", smo.inv_ac_rating));
         }
+
+
 
         //TODO add parameter initializers
 
