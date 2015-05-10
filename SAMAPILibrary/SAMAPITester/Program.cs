@@ -97,7 +97,7 @@ namespace SAMAPITester
                 .build();
 
 
-            //===Run the model for one year===
+            /*//===Run the model for one year===
             Stopwatch s = new Stopwatch(); s.Start();
             PVSystemModel pv = GUITranslator.runModel(gis, gui); // This is the model run command
             s.Stop(); Console.WriteLine("\nRuntime: " + s.ElapsedMilliseconds + "ms \n\n");
@@ -137,6 +137,7 @@ namespace SAMAPITester
             double sd = Math.Sqrt(sumOfSquaresOfDifferences / multival.Length); 
             Console.WriteLine("Average: "+average+",  STD: " + sd);
              */
+            
 
         }
 
