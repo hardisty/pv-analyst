@@ -16,6 +16,10 @@ namespace SAMAPILibrary.DataHandling.Parameters
         /// </summary>
         public readonly float cost_per_watt_dc; // in $/W
         /// <summary>
+        /// Whether to use the cost_per_watt_dc to calculate the cost
+        /// </summary>
+        public readonly bool use_cost_per_watt_override;
+        /// <summary>
         /// The Price to Compare from a utility bill
         /// </summary>
         public readonly float utility_price_to_compare; // in $/kWh
@@ -60,6 +64,7 @@ namespace SAMAPILibrary.DataHandling.Parameters
         {
             analysis_years = b.manalysis_years;
             cost_per_watt_dc = b.mcost_per_watt_dc;
+            use_cost_per_watt_override = b.muse_cost_per_watt;
             utility_price_to_compare = b.mutility_price_to_compare;
             utility_monthly_fixed_cost = b.mutility_monthly_fixed_cost;
             utility_ann_escal_rate = b.mutility_ann_escal_rate;
@@ -78,6 +83,7 @@ namespace SAMAPILibrary.DataHandling.Parameters
             public int manalysis_years = 25;
             public int mloan_term = 25;
             public float mcost_per_watt_dc = 0;
+            public bool muse_cost_per_watt = false;
             public float mutility_price_to_compare = 0.12f;
             public float mutility_monthly_fixed_cost = 0;
             public float mutility_ann_escal_rate = 0.5f;
@@ -113,12 +119,22 @@ namespace SAMAPILibrary.DataHandling.Parameters
         }
 
         /// <summary>
-        /// The system cost per watt DC in $/W. Set to zero to automatically calculate cost.
+        /// The system cost per watt DC in $/W. See use_cost_per_watt
         /// </summary>
         /// <param name="value">Default: 0</param>
         public GUIDataBuilder cost_per_watt_dc(float value)
         {
             mcost_per_watt_dc = value;
+            return this;
+        }
+
+        /// <summary>
+        /// Whether or not to use the cost_per_watt_dc
+        /// </summary>
+        /// <param name="value">Default: 0</param>
+        public GUIDataBuilder use_cost_per_watt(bool value)
+        {
+            muse_cost_per_watt = value;
             return this;
         }
 

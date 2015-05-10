@@ -4,26 +4,34 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace SAMAPILibrary.DataHandling.InverterModels
+namespace SAMAPILibrary.DataHandling.Parameters.InverterModels
 {
-    /// <summary>
-    /// Holder for Sandia National Labs inverter model parameters
-    /// </summary>
-    class SNLInverterModel: InverterModelParams
-    {
-        public readonly float inv_snl_c0;
-        public readonly float inv_snl_c1;
-        public readonly float inv_snl_c2;
-        public readonly float inv_snl_c3;
-        public readonly float inv_snl_paco;
-        public readonly float inv_snl_pdco;
-        public readonly float inv_snl_pnt;
-        public readonly float inv_snl_pso;
-        public readonly float inv_snl_vdco;
-        public readonly float inv_snl_vdcmax;
-        public readonly float inverter_model;
+    public class SNLInverterSettings: IInverterSettings
+    {   
+        [ISettings.Param("inv_snl_c0","float")]
+        public float inv_snl_c0;
+        [ISettings.Param("inv_snl_c1","float")]
+        public float inv_snl_c1;
+        [ISettings.Param("inv_snl_c2","float")]
+        public float inv_snl_c2;
+        [ISettings.Param("inv_snl_c3","float")]
+        public float inv_snl_c3;
+        [ISettings.Param("inv_snl_paco","float")]
+        public float inv_snl_paco;
+        [ISettings.Param("inv_snl_pdco","float")]
+        public float inv_snl_pdco;
+        [ISettings.Param("inv_snl_pnt","float")]
+        public float inv_snl_pnt;
+        [ISettings.Param("inv_snl_pso","float")]
+        public float inv_snl_pso;
+        [ISettings.Param("inv_snl_vdco","float")]
+        public float inv_snl_vdco;
+        [ISettings.Param("inv_snl_vdcmax","float")]
+        public float inv_snl_vdcmax;
+        [ISettings.Param("inverter_model","float")]
+        public float inverter_model;
 
-        public SNLInverterModel(String inverter_model_identifier){
+        public SNLInverterSettings(String inverter_model_identifier){
 
             inverter_model = 0;
 
@@ -78,21 +86,6 @@ namespace SAMAPILibrary.DataHandling.InverterModels
 
                 throw new Exception("Inverter Model Identifier not Found");
             }
-        }
-
-        public override void setDataParameters(SAMAPI.Data data)
-        {
-            data.SetNumber("inverter_model",inverter_model);
-            data.SetNumber("inv_snl_c0", inv_snl_c0);
-            data.SetNumber("inv_snl_c1", inv_snl_c1);
-            data.SetNumber("inv_snl_c2", inv_snl_c2);
-            data.SetNumber("inv_snl_c3", inv_snl_c3);
-            data.SetNumber("inv_snl_paco", inv_snl_paco);
-            data.SetNumber("inv_snl_pdco", inv_snl_pdco);
-            data.SetNumber("inv_snl_pnt", inv_snl_pnt);
-            data.SetNumber("inv_snl_pso", inv_snl_pso);
-            data.SetNumber("inv_snl_vdco", inv_snl_vdco);
-            data.SetNumber("inv_snl_vdcmax", inv_snl_vdcmax);
         }
 
         public override float getMaxRatedVoltage()

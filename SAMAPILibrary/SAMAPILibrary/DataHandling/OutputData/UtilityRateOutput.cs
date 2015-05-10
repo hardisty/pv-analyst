@@ -7,7 +7,7 @@ using SAMAPILibrary.SAMAPI;
 namespace SAMAPILibrary.DataHandling.OutputData
 {
 
-    public class UtilityRateOutput
+    public class UtilityRateOutput: Output
     {
         private Data data;
 
@@ -46,7 +46,7 @@ namespace SAMAPILibrary.DataHandling.OutputData
             }
         }
 
-        public UtilityRateOutput(Data data)
+        public UtilityRateOutput(Data data): base(data)
         {
             this.data = data;
         }

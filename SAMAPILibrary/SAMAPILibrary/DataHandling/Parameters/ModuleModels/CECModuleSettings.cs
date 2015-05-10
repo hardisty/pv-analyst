@@ -2,48 +2,75 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SAMAPILibrary.SAMAPI;
 using System.IO;
 
-namespace SAMAPILibrary.DataHandling.ModuleModels
+namespace SAMAPILibrary.DataHandling.Parameters.ModuleModels
 {
-    /// <summary>
-    /// Holder for CEC type module model parameters
-    /// </summary>
-    class CECModuleModel : ModuleModelParams
-    {
-        public readonly float cec_area;
-        public readonly float cec_a_ref;
-        public readonly float cec_adjust;
-        public readonly float cec_alpha_sc;
-        public readonly float cec_beta_oc;
-        public readonly float cec_gamma_r;
-        public readonly float cec_i_l_ref;
-        public readonly float cec_i_mp_ref;
-        public readonly float cec_i_o_ref;
-        public readonly float cec_i_sc_ref;
-        public readonly float cec_n_s;
-        public readonly float cec_r_s;
-        public readonly float cec_r_sh_ref;
-        public readonly float cec_t_noct;
-        public readonly float cec_v_mp_ref;
-        public readonly float cec_v_oc_ref;
-        public readonly float cec_temp_corr_mode;
-        public readonly float cec_standoff;
-        public readonly float cec_height;
-        public readonly float cec_mounting_config;
-        public readonly float cec_heat_transfer;
-        public readonly float cec_mounting_orientation;
-        public readonly float cec_gap_spacing;
-        public readonly float cec_module_width;
-        public readonly float cec_module_length;
-        public readonly float cec_array_rows;
-        public readonly float cec_array_cols;
-        public readonly float cec_backside_temp;
-        public readonly float module_model;
 
-        public CECModuleModel(String module_model_identifier)
-        {
+
+    public class CECModuleSettings: IModuleSettings
+    {
+        [ISettings.Param("cec_area", "float")]
+        public float cec_area;
+        [ISettings.Param("cec_a_ref", "float")]
+        public float cec_a_ref;
+        [ISettings.Param("cec_adjust", "float")]
+        public float cec_adjust;
+        [ISettings.Param("cec_alpha_sc", "float")]
+        public float cec_alpha_sc;
+        [ISettings.Param("cec_beta_oc", "float")]
+        public float cec_beta_oc;
+        [ISettings.Param("cec_gamma_r", "float")]
+        public float cec_gamma_r;
+        [ISettings.Param("cec_i_l_ref", "float")]
+        public float cec_i_l_ref;
+        [ISettings.Param("cec_i_mp_ref", "float")]
+        public float cec_i_mp_ref;
+        [ISettings.Param("cec_i_o_ref", "float")]
+        public float cec_i_o_ref;
+        [ISettings.Param("cec_i_sc_ref", "float")]
+        public float cec_i_sc_ref;
+        [ISettings.Param("cec_n_s", "float")]
+        public float cec_n_s;
+        [ISettings.Param("cec_r_s", "float")]
+        public float cec_r_s;
+        [ISettings.Param("cec_r_sh_ref", "float")]
+        public float cec_r_sh_ref;
+        [ISettings.Param("cec_t_noct", "float")]
+        public float cec_t_noct;
+        [ISettings.Param("cec_v_mp_ref", "float")]
+        public float cec_v_mp_ref;
+        [ISettings.Param("cec_v_oc_ref", "float")]
+        public float cec_v_oc_ref;
+        [ISettings.Param("cec_temp_corr_mode", "float")]
+        public float cec_temp_corr_mode;
+        [ISettings.Param("cec_standoff", "float")]
+        public float cec_standoff;
+        [ISettings.Param("cec_height", "float")]
+        public float cec_height;
+        [ISettings.Param("cec_mounting_config", "float")]
+        public float cec_mounting_config;
+        [ISettings.Param("cec_heat_transfer", "float")]
+        public float cec_heat_transfer;
+        [ISettings.Param("cec_mounting_orientation", "float")]
+        public float cec_mounting_orientation;
+        [ISettings.Param("cec_gap_spacing", "float")]
+        public float cec_gap_spacing;
+        [ISettings.Param("cec_module_width", "float")]
+        public float cec_module_width;
+        [ISettings.Param("cec_module_length", "float")]
+        public float cec_module_length;
+        [ISettings.Param("cec_array_rows", "float")]
+        public float cec_array_rows;
+        [ISettings.Param("cec_array_cols", "float")]
+        public float cec_array_cols;
+        [ISettings.Param("cec_backside_temp", "float")]
+        public float cec_backside_temp;
+        [ISettings.Param("module_model", "float")]
+        public float module_model;
+        
+        
+        public CECModuleSettings(string module_model_identifier){
             module_model = 1;
             if (module_model_identifier == "default")
             {
@@ -141,60 +168,40 @@ namespace SAMAPILibrary.DataHandling.ModuleModels
   
             }
         }
-        
+        public void getDefault() { }
 
-        public override void setDataParameters(Data data)
-        {
-            data.SetNumber("module_model", module_model);
-            data.SetNumber("cec_area", cec_area);
-            data.SetNumber("cec_a_ref", cec_a_ref);
-            data.SetNumber("cec_adjust", cec_adjust);
-            data.SetNumber("cec_alpha_sc", cec_alpha_sc);
-            data.SetNumber("cec_beta_oc", cec_beta_oc);
-            data.SetNumber("cec_gamma_r", cec_gamma_r);
-            data.SetNumber("cec_i_l_ref", cec_i_l_ref);
-            data.SetNumber("cec_i_mp_ref", cec_i_mp_ref);
-            data.SetNumber("cec_i_o_ref", cec_i_o_ref);
-            data.SetNumber("cec_i_sc_ref", cec_i_sc_ref);
-            data.SetNumber("cec_n_s", cec_n_s);
-            data.SetNumber("cec_r_s", cec_r_s);
-            data.SetNumber("cec_r_sh_ref", cec_r_sh_ref);
-            data.SetNumber("cec_t_noct", cec_t_noct);
-            data.SetNumber("cec_v_mp_ref", cec_v_mp_ref);
-            data.SetNumber("cec_v_oc_ref", cec_v_oc_ref);
-            data.SetNumber("cec_temp_corr_mode", cec_temp_corr_mode);
-            data.SetNumber("cec_standoff", cec_standoff);
-            data.SetNumber("cec_height", cec_height);
-            data.SetNumber("cec_mounting_config", cec_mounting_config);
-            data.SetNumber("cec_heat_transfer", cec_heat_transfer);
-            data.SetNumber("cec_mounting_orientation", cec_mounting_orientation);
-            data.SetNumber("cec_gap_spacing", cec_gap_spacing);
-            data.SetNumber("cec_module_width", cec_module_width);
-            data.SetNumber("cec_module_length", cec_module_length);
-            data.SetNumber("cec_array_rows", cec_array_rows);
-            data.SetNumber("cec_array_cols", cec_array_cols);
-            data.SetNumber("cec_backside_temp", cec_backside_temp);
-        }
-
+        /// <summary>
+        /// Get the module's width
+        /// </summary>
+        /// <returns>Width in meters</returns>
         public override float getWidth()
         {
             return cec_module_width;
         }
-
+        /// <summary>
+        /// Get the module's height/length
+        /// </summary>
+        /// <returns>Height in meters</returns>
         public override float getHeight()
         {
             return cec_module_length;
         }
-
+        /// <summary>
+        /// Get the module's Voltage at Max Power
+        /// </summary>
+        /// <returns>Voltage in Volts</returns>
         public override float getVmax()
         {
             return cec_v_mp_ref;
         }
-
+        /// <summary>
+        /// Get the rated power for the module
+        /// </summary>
+        /// <returns>Power in W</returns>
         public override float getRatedPower()
         {
-            return cec_v_mp_ref * cec_i_mp_ref;
+            return cec_v_mp_ref * cec_i_mp_ref; 
         }
-    } 
+    }
     
 }

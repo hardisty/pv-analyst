@@ -40,7 +40,9 @@ namespace SAMAPILibrary.DataHandling.Parameters
             string inverter_model_identifier;
             
             module_model_identifier = "default";
+            //module_model_identifier = "BEoptCA Default Module";
             inverter_model_identifier = "default";
+            //inverter_model_identifier = "ABB: MICRO-0.25-I-OUTD-US-208 208V [CEC 2014]";
 
             //TODO Get the appropriate ones based on the identifiers
             int module_model = 1;

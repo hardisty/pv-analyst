@@ -40,12 +40,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalculationWrappers\GISAdapter.cs" />
+    <Compile Include="CalculationWrappers\GUIAdapter.cs" />
     <Compile Include="CalculationWrappers\GUITranslator.cs" />
+    <Compile Include="CalculationWrappers\ModuleRunner.cs" />
     <Compile Include="CalculationWrappers\MultiplePVSystemModel.cs" />
+    <Compile Include="CalculationWrappers\PVSystemFullRun.cs" />
     <Compile Include="CalculationWrappers\PVSystemModel.cs" />
+    <Compile Include="DataHandling\OutputData\CompiledOutputData.cs" />
+    <Compile Include="DataHandling\OutputData\Output.cs" />
+    <Compile Include="DataHandling\OutputData\PVSAMV1Output.cs" />
     <Compile Include="DataHandling\Parameters\ArrayParameterList.cs" />
     <Compile Include="DataHandling\Parameters\ArrayParametersComputedList.cs" />
     <Compile Include="DataHandling\Parameters\CashLoanParameterList.cs" />
+    <Compile Include="DataHandling\Parameters\CashLoanSettings.cs" />
     <Compile Include="DataHandling\Parameters\DefaultFloatArrayParameter.cs" />
     <Compile Include="DataHandling\Parameters\DefaultFloatParameter.cs" />
     <Compile Include="DataHandling\Parameters\DefaultParameter.cs" />
@@ -55,9 +63,18 @@
     <Compile Include="DataHandling\Parameters\GUIData.cs" />
     <Compile Include="DataHandling\Parameters\IDefaultParameter.cs" />
     <Compile Include="DataHandling\Parameters\InverterModels\DatasheetInverterModel.cs" />
+    <Compile Include="DataHandling\Parameters\InverterModels\DatasheetInverterSettings.cs" />
+    <Compile Include="DataHandling\Parameters\InverterModels\IInverterSettings.cs" />
+    <Compile Include="DataHandling\Parameters\InverterModels\SNLInverterSettings.cs" />
     <Compile Include="DataHandling\Parameters\IParameter.cs" />
+    <Compile Include="DataHandling\Parameters\IRunnableSettings.cs" />
+    <Compile Include="DataHandling\Parameters\ModuleModels\CECModuleSettings.cs" />
+    <Compile Include="DataHandling\Parameters\ModuleModels\IModuleSettings.cs" />
     <Compile Include="DataHandling\Parameters\Parameter.cs" />
     <Compile Include="DataHandling\Parameters\ParameterList.cs" />
+    <Compile Include="DataHandling\Parameters\PVSAMV1Settings.cs" />
+    <Compile Include="DataHandling\Parameters\ISettings.cs" />
+    <Compile Include="DataHandling\Parameters\SizeAndCostSettings.cs" />
     <Compile Include="DataHandling\Parameters\StringParameter.cs" />
     <Compile Include="DataHandling\Parameters\UtilityRateParameterList.cs" />
     <Compile Include="DataHandling\Parameters\SizeAndCostParameterList.cs" />
@@ -70,6 +87,7 @@
     <Compile Include="DataHandling\OutputData\CashLoanOutput.cs" />
     <Compile Include="DataHandling\OutputData\SystemModelOutput.cs" />
     <Compile Include="DataHandling\OutputData\UtilityRateOutput.cs" />
+    <Compile Include="DataHandling\Parameters\UtilityRateSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SAMAPI\SSC.cs" />
     <Compile Include="SAMAPI\TestSSCAPIForm.cs" />
@@ -82,7 +100,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

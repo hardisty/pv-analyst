@@ -6,7 +6,7 @@ using SAMAPILibrary.SAMAPI;
 
 namespace SAMAPILibrary.DataHandling.OutputData
 {
-    public class CashLoanOutput
+    public class CashLoanOutput: Output
     {
         private readonly Data data;
 
@@ -44,7 +44,7 @@ namespace SAMAPILibrary.DataHandling.OutputData
             }
         }
 
-        public CashLoanOutput(Data data)
+        public CashLoanOutput(Data data): base(data)
         {
             this.data = data;
         }

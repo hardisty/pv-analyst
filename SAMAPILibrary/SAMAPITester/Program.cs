@@ -19,8 +19,52 @@ namespace SAMAPITester
             
             //PVSAM();
             SAMRewriteTest();
+            ridiculousRewrite();
 
         }
+
+        static void ridiculousRewrite()
+        {
+            GISData gis = new GISDataBuilder()
+                .azimuth(180)
+                .tilt(20)
+                .latitude(39.53f)
+                .longitude(-75.15f)
+                .width(1.7f)
+                .height(14.5f)
+                .build();
+
+            GUIData gui = new GUIDataBuilder()
+                .analysis_years(25)
+                .cost_per_watt_dc(0)
+                .use_cost_per_watt(false)
+                .discount_rate(8)
+                .inflation_rate(2.5f)
+                .loan_rate(7.5f)
+                .loan_term(25)
+                .loan_debt(100)
+                .srec_price(50f)
+                .utility_ann_escal_rate(0.5f)
+                .utility_monthly_fixed_cost(0)
+                .utility_price_to_compare(0.12f)
+                .enable_incentives(true)
+                .build();
+
+            CompiledOutputData cod = PVSystemFullRun.run(gis,gui);
+
+            //===Example Uses of the Output For Single Year===
+            Console.WriteLine("Nameplate Capacity: " + cod.getSizeAndCostSettings().dc_rating + " kWDC");
+            Console.WriteLine("Inverter Capacity: " + cod.getSizeAndCostSettings().ac_rating + " WAC");
+            Console.WriteLine("Total System Cost: $" + cod.getSizeAndCostSettings().total_cost);
+            Console.WriteLine("Cost Per Watt: $" + cod.getSizeAndCostSettings().cost_per_watt_dc);
+
+            Console.WriteLine("Year One Power Produced: " + cod.getPVSAMV1Output().ac_annual + " kWh");
+            Console.WriteLine("Value of energy in Year 1: $" + cod.getUtilityRateOutput().energy_value[0]);
+            Console.WriteLine("Net Present Value: $" + cod.getCashLoanOutput().npv);
+
+
+        }
+
         /// <summary>
         /// Demo of the SAM API implemented by J. Ranalli on 8/21/14
         /// </summary>
@@ -75,7 +119,7 @@ namespace SAMAPITester
                 //Console.WriteLine(yrbyyrvalue[i]);
             }
 
-
+            /*
             //===Run the model for multiple years===
             Stopwatch s2 = new Stopwatch(); s.Start();
             int[] years = new int[] { 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 };
@@ -92,6 +136,7 @@ namespace SAMAPITester
             double sumOfSquaresOfDifferences = multival.Select(val => (val - average) * (val - average)).Sum();
             double sd = Math.Sqrt(sumOfSquaresOfDifferences / multival.Length); 
             Console.WriteLine("Average: "+average+",  STD: " + sd);
+             */
 
         }
 
