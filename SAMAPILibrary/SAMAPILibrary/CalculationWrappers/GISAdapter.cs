@@ -8,9 +8,8 @@ namespace SAMAPILibrary.CalculationWrappers
 {
     public class GISAdapter
     {
-        public static PVSAMV1Settings getSettings(GISData gis)
+        public static void applySettings(PVSAMV1Settings pvss, GISData gis)
         {
-            PVSAMV1Settings pvss = PVSAMV1Settings.getDefault();
             int numModules = calcNumPanelsOnRoof(gis.width, gis.height, pvss.module_model.getWidth(), pvss.module_model.getHeight());
             if (pvss.inverter_model == null)
             {
@@ -27,8 +26,6 @@ namespace SAMAPILibrary.CalculationWrappers
             pvss.subarray1_tilt = gis.tilt;
             pvss.subarray1_azimuth = gis.azimuth;
             pvss.inverter_count = 1;
-
-            return pvss;
 
         }
 
